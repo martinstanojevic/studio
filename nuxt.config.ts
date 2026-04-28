@@ -7,11 +7,10 @@ export default defineNuxtConfig({
     'nuxt-studio',
   ],
   studio: {
-    // Studio publishes commits to the *content* repo, not this app repo.
     repository: {
       provider: 'github',
       owner: 'martinstanojevic',
-      repo: 'studio-content',
+      repo: 'studio',
       branch: 'main',
     },
   },

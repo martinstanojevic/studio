@@ -5,15 +5,6 @@
         <NuxtLink to="/" class="font-semibold text-lg">
           {{ appConfig.site?.title ?? 'CourseKata Resources' }}
         </NuxtLink>
-        <UButton
-          to="https://studio.nuxt.com"
-          target="_blank"
-          variant="ghost"
-          size="sm"
-          icon="i-lucide-pencil"
-        >
-          Edit in Studio
-        </UButton>
       </div>
     </header>
     <main>

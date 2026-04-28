@@ -10,7 +10,7 @@ export default defineContentConfig({
         // for unauthenticated public access, but anonymous GitHub API requests
         // are rate-limited (60/hr per IP), which trips up `npm run dev` quickly.
         repository: {
-          url: 'https://github.com/martinstanojevic/studio-content',
+          url: 'https://github.com/martinstanojevic/studio',
           branch: 'main',
           // Only attach auth when a token is set; otherwise GitHub treats the
           // request as anonymous (60/hr rate limit, fine for a small eval repo).
