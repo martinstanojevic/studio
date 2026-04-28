@@ -12,12 +12,12 @@ export default defineContentConfig({
         repository: {
           url: 'https://github.com/martinstanojevic/studio-content',
           branch: 'main',
-          auth: {
-            // GitHub PAT auth uses the token as the password and any non-empty
-            // username — the GitHub API ignores the username for token auth.
-            username: 'token',
-            token: process.env.GITHUB_TOKEN ?? '',
-          },
+          // Only attach auth when a token is set; otherwise GitHub treats the
+          // request as anonymous (60/hr rate limit, fine for a small eval repo).
+          // Sending an empty `auth.token` produces a 401, not anonymous fallback.
+          ...(process.env.GITHUB_TOKEN
+            ? { auth: { username: 'token', token: process.env.GITHUB_TOKEN } }
+            : {}),
         },
         include: 'resources/**/*.md',
       },
