@@ -6,11 +6,6 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     'nuxt-studio',
   ],
-  content: {
-    // Build-time GitHub source. Token is supplied via content.config.ts auth.token,
-    // which reads process.env.GITHUB_TOKEN. There is no @nuxt/content-defined env var
-    // name — we pick GITHUB_TOKEN for compatibility with GitHub CLI conventions.
-  },
   studio: {
     // Studio publishes commits to the *content* repo, not this app repo.
     repository: {
