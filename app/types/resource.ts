@@ -4,6 +4,13 @@ import type { z } from '@nuxt/content'
 // We reconstruct the type here rather than importing from content.config.ts
 // because the latter is a build config and importing it into runtime code
 // pulls config-only modules into the client bundle.
+//
+// TODO (drift risk): this interface and the Zod schema in content.config.ts
+// must be kept in sync by hand. If we add fields to one and forget the other,
+// either runtime parsing rejects valid data or components see undeclared
+// fields. The cleaner pattern is to factor the Zod schema into a shared
+// module, then `export type ResourceFrontmatter = z.infer<typeof schema>`.
+// Acceptable for the eval prototype; revisit if any of this code ships.
 export interface ResourceFrontmatter {
   title: string
   shortDescription: string
