@@ -1,36 +1,30 @@
 ---
 title: Chapter 3 quiz — distributions and summary statistics
-shortDescription: Online auto-graded quiz covering the chapter on distributions, mean, median, and spread.
-whatStudentsDo: Complete a 12-question online quiz with mixed multiple-choice and short-answer items.
+description: Online auto-graded quiz covering the chapter on distributions, mean, median, and spread.
 type: Assessment
 function: Assessment
 modality: Online
 coverage: Chapter
 textbookVersions:
   - ABC v6.0
-learningGoals:
-  - Compute mean, median, and standard deviation from small datasets
-  - Choose an appropriate measure of center for a given distribution shape
-  - Interpret summary statistics in the context of the original data
 topicTags:
   - assessment
   - summary statistics
   - distributions
+  - demographics
+  - course survey
+learningGoals:
+  - Compute mean, median, and standard deviation from small datasets
+  - Choose an appropriate measure of center for a given distribution shape
+  - Interpret summary statistics in the context of the original data
 lengthMinutes: 20
-extraMaterialsNeeded: false
-studentDataCollectionRequired: false
+extraMaterials: []
 dataset:
   name: student-survey
-  source: Synthetic — see notes
-  variableCount: 8
   variableTypes:
     - numeric
     - categorical
     - ordinal
-  topicTags:
-    - demographics
-    - course survey
-lastUpdated: 2026-03-18
 ---
 
 ## What happens in the classroom

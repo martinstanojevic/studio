@@ -8,7 +8,7 @@
         <h3 class="font-semibold text-base leading-tight">{{ resource.title }}</h3>
         <UBadge :label="resource.type" variant="soft" size="sm" />
       </div>
-      <p class="text-sm text-muted line-clamp-3 mb-3">{{ resource.shortDescription }}</p>
+      <p class="text-sm text-muted line-clamp-3 mb-3">{{ resource.description }}</p>
       <div class="flex items-center gap-3 text-xs text-muted">
         <span class="flex items-center gap-1">
           <UIcon name="i-lucide-clock" class="size-3.5" />
@@ -18,7 +18,7 @@
           <UIcon name="i-lucide-database" class="size-3.5" />
           {{ resource.dataset.name }}
         </span>
-        <span class="ml-auto">{{ formatDate(resource.lastUpdated) }}</span>
+        <span v-if="resource.lastModified" class="ml-auto">{{ formatDate(resource.lastModified) }}</span>
       </div>
     </NuxtLink>
   </UCard>

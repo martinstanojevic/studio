@@ -17,10 +17,10 @@
           <UIcon name="i-lucide-clock" class="size-4" />
           {{ resource.lengthMinutes }} min
         </span>
-        <span>Updated {{ formatDate(resource.lastUpdated) }}</span>
+        <span v-if="resource.lastModified">Updated {{ formatDate(resource.lastModified) }}</span>
       </div>
 
-      <p class="text-lg text-muted mb-8">{{ resource.shortDescription }}</p>
+      <p class="text-lg text-muted mb-8">{{ resource.description }}</p>
 
       <ContentRenderer v-if="resource" :value="resource" class="prose dark:prose-invert max-w-none" />
     </div>
@@ -33,13 +33,9 @@
           <DetailRow label="Coverage" :value="resource.coverage" />
           <DetailRow label="Textbook versions" :value="resource.textbookVersions.join(', ')" />
           <DetailRow
-            label="Student data collection"
-            :value="resource.studentDataCollectionRequired ? 'Required' : 'Not required'"
-          />
-          <DetailRow
-            v-if="resource.extraMaterialsNeeded"
+            v-if="resource.extraMaterials.length"
             label="Extra materials"
-            :value="(resource.extraMaterialsList ?? []).join(', ') || 'Required (see notes)'"
+            :value="resource.extraMaterials.join(', ')"
           />
         </dl>
       </UCard>
@@ -55,9 +51,7 @@
         <h3 class="font-semibold text-sm mb-3">Dataset</h3>
         <dl class="space-y-2 text-sm">
           <DetailRow label="Name" :value="resource.dataset.name" />
-          <DetailRow label="Source" :value="resource.dataset.source" />
-          <DetailRow label="Variables" :value="`${resource.dataset.variableCount} (${resource.dataset.variableTypes.join(', ')})`" />
-          <DetailRow v-if="resource.dataset.topicTags.length" label="Tags" :value="resource.dataset.topicTags.join(', ')" />
+          <DetailRow label="Variables" :value="resource.dataset.variableTypes.join(', ')" />
         </dl>
       </UCard>
     </aside>

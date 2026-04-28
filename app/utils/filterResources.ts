@@ -10,7 +10,7 @@ export interface ResourceFilters {
   topicTags: string[]
   lengthMin: number | null
   lengthMax: number | null
-  requiresExtraMaterials: boolean | null
+  hasExtras: boolean | null
   sort: 'lastUpdated' | 'title' | 'length'
 }
 
@@ -24,7 +24,7 @@ export const EMPTY_FILTERS: ResourceFilters = {
   topicTags: [],
   lengthMin: null,
   lengthMax: null,
-  requiresExtraMaterials: null,
+  hasExtras: null,
   sort: 'lastUpdated',
 }
 
@@ -39,10 +39,10 @@ export function applyFilters(resources: Resource[], f: ResourceFilters): Resourc
     if (f.topicTags.length && !r.topicTags.some(t => f.topicTags.includes(t))) return false
     if (f.lengthMin != null && r.lengthMinutes < f.lengthMin) return false
     if (f.lengthMax != null && r.lengthMinutes > f.lengthMax) return false
-    if (f.requiresExtraMaterials === true && !r.extraMaterialsNeeded) return false
-    if (f.requiresExtraMaterials === false && r.extraMaterialsNeeded) return false
+    if (f.hasExtras === true && r.extraMaterials.length === 0) return false
+    if (f.hasExtras === false && r.extraMaterials.length > 0) return false
     if (q) {
-      const haystack = `${r.title} ${r.shortDescription} ${r.topicTags.join(' ')}`.toLowerCase()
+      const haystack = `${r.title} ${r.description} ${r.topicTags.join(' ')}`.toLowerCase()
       if (!haystack.includes(q)) return false
     }
     return true
@@ -51,8 +51,12 @@ export function applyFilters(resources: Resource[], f: ResourceFilters): Resourc
   return [...filtered].sort((a, b) => {
     if (f.sort === 'title') return a.title.localeCompare(b.title)
     if (f.sort === 'length') return a.lengthMinutes - b.lengthMinutes
-    // lastUpdated, descending
-    return b.lastUpdated.localeCompare(a.lastUpdated)
+    // lastUpdated, descending. Falls back to title when the date field is
+    // missing (e.g. stat() failed) so ordering stays stable.
+    const am = a.lastModified ?? ''
+    const bm = b.lastModified ?? ''
+    if (am === bm) return a.title.localeCompare(b.title)
+    return bm.localeCompare(am)
   })
 }
 
@@ -67,6 +71,6 @@ export function isFilterActive(f: ResourceFilters): boolean {
     f.topicTags.length > 0 ||
     f.lengthMin != null ||
     f.lengthMax != null ||
-    f.requiresExtraMaterials != null
+    f.hasExtras != null
   )
 }

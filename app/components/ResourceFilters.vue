@@ -99,13 +99,11 @@
       </div>
     </UFormField>
 
-    <UFormField label="Extra materials needed">
-      <USelectMenu
-        class="w-full"
-        :model-value="extraMaterialsValue"
-        :items="extraMaterialsOptions"
-        placeholder="Any"
-        @update:model-value="onExtraMaterialsChange"
+    <UFormField label="Extras">
+      <UCheckbox
+        :model-value="filters.hasExtras === true"
+        label="Requires extra materials"
+        @update:model-value="(v: boolean) => update({ hasExtras: v ? true : null })"
       />
     </UFormField>
   </aside>
@@ -130,16 +128,4 @@ const textbookVersionOptions = computed(() => uniq(props.resources.flatMap(r => 
 const topicTagOptions = computed(() => uniq(props.resources.flatMap(r => r.topicTags)).sort())
 
 const active = computed(() => isFilterActive(filters.value))
-
-const extraMaterialsOptions = ['Any', 'Required', 'Not required']
-const extraMaterialsValue = computed(() => {
-  if (filters.value.requiresExtraMaterials === true) return 'Required'
-  if (filters.value.requiresExtraMaterials === false) return 'Not required'
-  return 'Any'
-})
-function onExtraMaterialsChange(v: string) {
-  update({
-    requiresExtraMaterials: v === 'Required' ? true : v === 'Not required' ? false : null,
-  })
-}
 </script>

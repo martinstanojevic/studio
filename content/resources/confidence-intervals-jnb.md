@@ -1,35 +1,28 @@
 ---
 title: Discussion — what does a 95% confidence interval mean?
-shortDescription: A discussion-driven notebook unpacking the meaning of confidence intervals and common misconceptions.
-whatStudentsDo: Generate confidence intervals from simulated samples and debate three competing interpretations.
+description: A discussion-driven notebook unpacking the meaning of confidence intervals and common misconceptions.
 type: JNB
-jnbSubtype: Discussion
 function: Discussion
 modality: Online
 coverage: Concept
 textbookVersions:
   - ABC v5.0
-learningGoals:
-  - State a correct frequentist interpretation of a confidence interval
-  - Identify three common misinterpretations
-  - Use simulation to defend the correct interpretation
 topicTags:
   - confidence intervals
   - inference
   - frequentist interpretation
+  - simulation
+  - sampling distribution
+learningGoals:
+  - State a correct frequentist interpretation of a confidence interval
+  - Identify three common misinterpretations
+  - Use simulation to defend the correct interpretation
 lengthMinutes: 35
-extraMaterialsNeeded: false
-studentDataCollectionRequired: false
+extraMaterials: []
 dataset:
   name: ci-simulation
-  source: Synthetic — generated in-notebook
-  variableCount: 3
   variableTypes:
     - numeric
-  topicTags:
-    - simulation
-    - sampling distribution
-lastUpdated: 2026-04-19
 ---
 
 ## What happens in the classroom

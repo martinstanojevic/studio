@@ -1,36 +1,29 @@
 ---
 title: Comparing three models on a holdout set
-shortDescription: Students fit three competing models and compare their performance on held-out data.
-whatStudentsDo: Run pre-written model fits, compute residuals on a holdout set, and decide which model to recommend.
+description: Students fit three competing models and compare their performance on held-out data.
 type: JNB
-jnbSubtype: Practice
 function: Practice
 modality: Online
 coverage: Section
 textbookVersions:
   - ABC v6.0
-learningGoals:
-  - Compute and interpret holdout residuals
-  - Compare models using a common loss metric
-  - Recognize when a more complex model is not justified by the data
 topicTags:
   - model comparison
   - holdout validation
   - residuals
+  - model predictions
+  - holdout set
+learningGoals:
+  - Compute and interpret holdout residuals
+  - Compare models using a common loss metric
+  - Recognize when a more complex model is not justified by the data
 lengthMinutes: 50
-extraMaterialsNeeded: false
-studentDataCollectionRequired: false
+extraMaterials: []
 dataset:
   name: models-comparison
-  source: Synthetic — see notes
-  variableCount: 5
   variableTypes:
     - numeric
     - categorical
-  topicTags:
-    - model predictions
-    - holdout set
-lastUpdated: 2026-03-25
 ---
 
 ## What happens in the classroom

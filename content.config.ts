@@ -25,33 +25,28 @@ export default defineContentConfig({
       // },
       schema: z.object({
         title: z.string(),
-        shortDescription: z.string(),
-        whatStudentsDo: z.string(),
+        description: z.string(),
 
         type: z.enum(['JNB', 'Worksheet', 'Slide deck', 'Activity', 'Assessment', 'Reading']),
-        jnbSubtype: z.string().optional(),
         function: z.enum(['Teaching', 'Assessment', 'Practice', 'Discussion', 'Project']),
         modality: z.enum(['Online', 'Paper-based', 'Hybrid']),
         coverage: z.enum(['Page', 'Section', 'Chapter', 'Book', 'Concept']),
 
         textbookVersions: z.array(z.string()),
-        learningGoals: z.array(z.string()),
         topicTags: z.array(z.string()),
+        learningGoals: z.array(z.string()),
 
         lengthMinutes: z.number(),
-        extraMaterialsNeeded: z.boolean(),
-        extraMaterialsList: z.array(z.string()).optional(),
-        studentDataCollectionRequired: z.boolean(),
+        extraMaterials: z.array(z.string()).default([]),
 
         dataset: z.object({
           name: z.string(),
-          source: z.string(),
-          variableCount: z.number(),
           variableTypes: z.array(z.enum(['numeric', 'categorical', 'ordinal', 'datetime', 'text'])),
-          topicTags: z.array(z.string()),
         }).optional(),
 
-        lastUpdated: z.string(), // ISO date string; Studio handles dates better as strings
+        // Auto-derived from file mtime via the content:file:afterParse hook in
+        // nuxt.config.ts. Stored on the doc so queries can sort by it.
+        lastModified: z.string().optional(),
       }),
     }),
   },

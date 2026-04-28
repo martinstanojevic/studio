@@ -1,37 +1,30 @@
 ---
 title: Histogram exploration with the characters dataset
-shortDescription: Students build histograms of character heights and reason about shape, center, and spread.
-whatStudentsDo: Generate histograms with different bin widths and compare the resulting shapes.
+description: Students build histograms of character heights and reason about shape, center, and spread.
 type: JNB
-jnbSubtype: Exploration
 function: Teaching
 modality: Online
 coverage: Section
 textbookVersions:
   - ABC v5.0
   - ABC v6.0
-learningGoals:
-  - Identify how bin width changes the apparent shape of a distribution
-  - Distinguish unimodal from bimodal distributions
-  - Use vocabulary of center and spread accurately
 topicTags:
   - histograms
   - distributions
   - data visualization
+  - fictional characters
+  - heights
+learningGoals:
+  - Identify how bin width changes the apparent shape of a distribution
+  - Distinguish unimodal from bimodal distributions
+  - Use vocabulary of center and spread accurately
 lengthMinutes: 45
-extraMaterialsNeeded: false
-studentDataCollectionRequired: false
+extraMaterials: []
 dataset:
   name: characters
-  source: CourseKata starter datasets v2
-  variableCount: 6
   variableTypes:
     - numeric
     - categorical
-  topicTags:
-    - fictional characters
-    - heights
-lastUpdated: 2026-04-15
 ---
 
 ## What happens in the classroom

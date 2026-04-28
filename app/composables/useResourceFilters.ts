@@ -41,7 +41,7 @@ export function useResourceFilters() {
     topicTags: readArray(route.query.topicTags),
     lengthMin: readNumber(route.query.lengthMin),
     lengthMax: readNumber(route.query.lengthMax),
-    requiresExtraMaterials: readBoolean(route.query.requiresExtraMaterials),
+    hasExtras: readBoolean(route.query.hasExtras),
     sort: readSort(route.query.sort),
   }))
 
@@ -54,7 +54,7 @@ export function useResourceFilters() {
     }
     if (next.lengthMin != null) query.lengthMin = String(next.lengthMin)
     if (next.lengthMax != null) query.lengthMax = String(next.lengthMax)
-    if (next.requiresExtraMaterials != null) query.requiresExtraMaterials = String(next.requiresExtraMaterials)
+    if (next.hasExtras != null) query.hasExtras = String(next.hasExtras)
     if (next.sort !== 'lastUpdated') query.sort = next.sort
     router.replace({ query })
   }

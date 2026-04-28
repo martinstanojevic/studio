@@ -1,29 +1,25 @@
 ---
 title: Multi-week data collection project
-shortDescription: Students design a small observational study, collect their own data, and report findings.
-whatStudentsDo: Pick a question, design a data collection plan, gather data over two weeks, and present a poster.
+description: Students design a small observational study, collect their own data, and report findings.
 type: Activity
 function: Project
 modality: Hybrid
 coverage: Book
 textbookVersions:
   - ABC v6.0
-learningGoals:
-  - Translate a real-world question into a measurable variable
-  - Design a feasible data-collection protocol
-  - Communicate findings honestly, including study limitations
 topicTags:
   - data collection
   - study design
   - communication
+learningGoals:
+  - Translate a real-world question into a measurable variable
+  - Design a feasible data-collection protocol
+  - Communicate findings honestly, including study limitations
 lengthMinutes: 90
-extraMaterialsNeeded: true
-extraMaterialsList:
+extraMaterials:
   - stopwatch or phone timer
   - clipboard
   - poster paper
-studentDataCollectionRequired: true
-lastUpdated: 2026-04-22
 ---
 
 ## What happens in the classroom

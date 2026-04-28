@@ -13,33 +13,26 @@ import type { z } from '@nuxt/content'
 // Acceptable for the eval prototype; revisit if any of this code ships.
 export interface ResourceFrontmatter {
   title: string
-  shortDescription: string
-  whatStudentsDo: string
+  description: string
   type: 'JNB' | 'Worksheet' | 'Slide deck' | 'Activity' | 'Assessment' | 'Reading'
-  jnbSubtype?: string
   function: 'Teaching' | 'Assessment' | 'Practice' | 'Discussion' | 'Project'
   modality: 'Online' | 'Paper-based' | 'Hybrid'
   coverage: 'Page' | 'Section' | 'Chapter' | 'Book' | 'Concept'
   textbookVersions: string[]
-  learningGoals: string[]
   topicTags: string[]
+  learningGoals: string[]
   lengthMinutes: number
-  extraMaterialsNeeded: boolean
-  extraMaterialsList?: string[]
-  studentDataCollectionRequired: boolean
+  extraMaterials: string[]
   dataset?: {
     name: string
-    source: string
-    variableCount: number
     variableTypes: ('numeric' | 'categorical' | 'ordinal' | 'datetime' | 'text')[]
-    topicTags: string[]
   }
-  lastUpdated: string
 }
 
 // Nuxt Content's queryCollection adds these to every doc:
 export interface Resource extends ResourceFrontmatter {
-  path: string         // e.g. "/resources/histogram-exploration"
-  stem: string         // e.g. "resources/histogram-exploration"
-  body?: unknown       // parsed MDC AST — used by <ContentRenderer>
+  path: string             // e.g. "/resources/histogram-exploration"
+  stem: string             // e.g. "resources/histogram-exploration"
+  body?: unknown           // parsed MDC AST — used by <ContentRenderer>
+  lastModified?: string    // ISO string, attached by the content:file:afterParse hook in nuxt.config.ts
 }

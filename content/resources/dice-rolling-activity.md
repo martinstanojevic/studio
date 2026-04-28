@@ -1,30 +1,26 @@
 ---
 title: Dice rolling and the empirical distribution
-shortDescription: Students roll dice in pairs and combine results to build up an empirical distribution.
-whatStudentsDo: Roll a six-sided die 50 times, tally results, and pool with the class to compare to the theoretical distribution.
+description: Students roll dice in pairs and combine results to build up an empirical distribution.
 type: Activity
 function: Teaching
 modality: Paper-based
 coverage: Section
 textbookVersions:
   - ABC v6.0
-learningGoals:
-  - Distinguish empirical from theoretical distributions
-  - Observe how sample size affects how closely empirical matches theoretical
-  - Practice constructing a relative frequency table
 topicTags:
   - probability
   - distributions
   - empirical distribution
   - sampling
+learningGoals:
+  - Distinguish empirical from theoretical distributions
+  - Observe how sample size affects how closely empirical matches theoretical
+  - Practice constructing a relative frequency table
 lengthMinutes: 25
-extraMaterialsNeeded: true
-extraMaterialsList:
+extraMaterials:
   - six-sided dice (one per pair)
   - tally sheet
   - pencils
-studentDataCollectionRequired: true
-lastUpdated: 2026-03-02
 ---
 
 ## What happens in the classroom

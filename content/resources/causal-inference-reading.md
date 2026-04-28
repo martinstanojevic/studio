@@ -1,17 +1,10 @@
 ---
 title: Reading — correlation, causation, and confounders
-coverage: Concept
-extraMaterialsNeeded: false
+description: A short reading introducing the difference between correlation and causation through three case studies.
+type: Reading
 function: Teaching
-lastUpdated: 2026-04-04
-learningGoals:
-  - Define a confounding variable in plain language
-  - Identify confounders in three real-world examples
-  - Articulate why observational studies cannot directly establish causation
-lengthMinutes: 40
 modality: Online
-shortDescription: A short reading introducing the difference between correlation and causation through three case studies.
-studentDataCollectionRequired: false
+coverage: Concept
 textbookVersions:
   - ABC v5.0
   - ABC v6.0
@@ -19,8 +12,12 @@ topicTags:
   - causal inference
   - confounders
   - study design
-type: Reading
-whatStudentsDo: Read the text outside class and submit two reflection questions before the next session.
+learningGoals:
+  - Define a confounding variable in plain language
+  - Identify confounders in three real-world examples
+  - Articulate why observational studies cannot directly establish causation
+lengthMinutes: 40
+extraMaterials: []
 ---
 
 ## What happens in the classroom

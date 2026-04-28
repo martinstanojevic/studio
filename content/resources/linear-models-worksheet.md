@@ -1,39 +1,32 @@
 ---
 title: Fitting and interpreting simple linear models
-shortDescription: Students fit linear models by hand and interpret slope and intercept in context.
-whatStudentsDo: Compute slope and intercept from small datasets and sketch the fitted line on graph paper.
+description: Students fit linear models by hand and interpret slope and intercept in context.
 type: Worksheet
 function: Practice
 modality: Paper-based
 coverage: Chapter
 textbookVersions:
   - ABC v6.0
-learningGoals:
-  - Compute slope and intercept of a least-squares line by hand for small datasets
-  - Interpret slope and intercept in the units of the original variables
-  - Identify when a linear model is and is not appropriate
 topicTags:
   - linear models
   - regression
   - slope and intercept
+  - public health
+  - regression examples
+learningGoals:
+  - Compute slope and intercept of a least-squares line by hand for small datasets
+  - Interpret slope and intercept in the units of the original variables
+  - Identify when a linear model is and is not appropriate
 lengthMinutes: 30
-extraMaterialsNeeded: true
-extraMaterialsList:
+extraMaterials:
   - graph paper
   - ruler
   - calculator
-studentDataCollectionRequired: false
 dataset:
   name: cigarettes
-  source: CourseKata starter datasets v2 — public health teaching set
-  variableCount: 4
   variableTypes:
     - numeric
     - categorical
-  topicTags:
-    - public health
-    - regression examples
-lastUpdated: 2026-02-08
 ---
 
 ## What happens in the classroom

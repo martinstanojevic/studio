@@ -1,7 +1,6 @@
 ---
 title: Introduction to statistical thinking
-shortDescription: A book-opening slide deck framing the course around variation, models, and uncertainty.
-whatStudentsDo: Follow along, answer warm-up polling questions, and discuss two motivating examples.
+description: A book-opening slide deck framing the course around variation, models, and uncertainty.
 type: Slide deck
 function: Teaching
 modality: Hybrid
@@ -9,18 +8,16 @@ coverage: Book
 textbookVersions:
   - ABC v5.0
   - ABC v6.0
-learningGoals:
-  - Frame statistics as the study of variation and uncertainty
-  - Recognize the distinction between sample and population
-  - Identify the three modeling questions used throughout the book
 topicTags:
   - course introduction
   - statistical thinking
   - variation
+learningGoals:
+  - Frame statistics as the study of variation and uncertainty
+  - Recognize the distinction between sample and population
+  - Identify the three modeling questions used throughout the book
 lengthMinutes: 60
-extraMaterialsNeeded: false
-studentDataCollectionRequired: false
-lastUpdated: 2026-01-22
+extraMaterials: []
 ---
 
 ## What happens in the classroom
