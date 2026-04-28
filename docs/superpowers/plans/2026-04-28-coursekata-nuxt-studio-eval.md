@@ -25,7 +25,7 @@
 | `package.json` | Scaffolded by `nuxi init`; dependencies pinned in Task 2 |
 | `nuxt.config.ts` | Registers `@nuxt/content`, Nuxt UI, and the Studio module |
 | `content.config.ts` | Zod schema + GitHub source config for `resources` collection |
-| `app.config.ts` | Site-level editable settings (title, hero copy, footer) |
+| `app/app.config.ts` | Site-level editable settings (title, hero copy, footer). Lives under `app/` because Nuxt 4's `srcDir` is `app/`; `app.config.ts` at project root resolves but `useAppConfig()` returns empty. |
 | `app/app.vue` | Root layout — header + `<NuxtPage />` |
 | `app/pages/index.vue` | Catalog page — filters, sort, search, card grid |
 | `app/pages/resources/[slug].vue` | Resource detail / preview page |
@@ -1384,14 +1384,14 @@ git commit -m "Add resource detail page with metadata sidebar"
 
 ---
 
-## Task 13: Configure `app.config.ts` for site-level Studio-editable settings
+## Task 13: Configure `app/app.config.ts` for site-level Studio-editable settings
 
 **Files:**
-- Create: `app.config.ts`
+- Create: `app/app.config.ts`
 
-- [ ] **Step 1: Write `app.config.ts`**
+- [ ] **Step 1: Write `app/app.config.ts`**
 
-Path: `app.config.ts` (project root)
+Path: `app/app.config.ts` (under the Nuxt 4 srcDir; NOT the project root — verified during execution that putting it at the project root makes `useAppConfig()` return undefined)
 
 ```ts
 export default defineAppConfig({
@@ -1440,7 +1440,7 @@ The catalog page should now show "CourseKata Resources" and the tagline above th
 - [ ] **Step 4: Commit**
 
 ```bash
-git add app.config.ts app/pages/index.vue
+git add app/app.config.ts app/pages/index.vue
 git commit -m "Add site-level config with title and tagline"
 ```
 
