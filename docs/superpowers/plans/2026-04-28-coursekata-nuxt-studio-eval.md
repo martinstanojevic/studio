@@ -153,10 +153,10 @@ git commit -m "Pin verified package versions in implementation plan"
 Run from the project root (`/Users/martinstanojevic/projects/studio`):
 
 ```bash
-npx nuxi@latest init . --packageManager npm --gitInit false --force
+npx nuxi@latest init . --packageManager npm --gitInit false --force --template minimal --no-install
 ```
 
-`--force` allows scaffolding into a non-empty directory (the design doc and source spec already exist). `--gitInit false` keeps the existing repo's history.
+`--force` allows scaffolding into a non-empty directory (the design doc and source spec already exist). `--gitInit false` keeps the existing repo's history. `--template minimal --no-install` are required to suppress the interactive template-picker and module-wizard prompts that the other flags don't actually defeat in `nuxi 3.35.x` — without them, `npx nuxi init` will hang under non-TTY (verified during Task 2 execution).
 
 Expected output: scaffolded files including `package.json`, `nuxt.config.ts`, `app/app.vue`, `tsconfig.json`. If `nuxi` insists on a clean directory, scaffold into a temporary directory (`/tmp/studio-scaffold`) and copy the files in manually, preserving the existing `.git`, `docs/`, `.gitignore`, and the source spec markdown.
 
@@ -165,10 +165,12 @@ Expected output: scaffolded files including `package.json`, `nuxt.config.ts`, `a
 Verified package names from Task 1:
 
 ```bash
-npm install @nuxt/content @nuxt/ui tailwindcss nuxt-studio
+npm install @nuxt/content @nuxt/ui tailwindcss nuxt-studio better-sqlite3
 ```
 
 `nuxt-studio` (NOT the archived `@nuxthq/studio`) is the current Nuxt Studio module. The Studio docs recommend `npx nuxt module add nuxt-studio` as an equivalent shorthand that also wires the modules-array entry — either approach is fine; doing it manually keeps the lockfile diff smaller.
+
+`better-sqlite3` is required by `@nuxt/content` v3's local SQLite store. Without it, the first `npm run dev` triggers an interactive prompt to install a SQLite adapter, which crashes under non-TTY runs (verified during Task 2 execution). Pinning it explicitly avoids that.
 
 - [ ] **Step 3: Register modules in `nuxt.config.ts`**
 
@@ -222,7 +224,7 @@ This is the Nuxt UI v4 entry (the v3/v4 install flow is the same: install `@nuxt
     <header class="border-b border-default">
       <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <NuxtLink to="/" class="font-semibold text-lg">
-          {{ $appConfig.site?.title ?? 'CourseKata Resources' }}
+          {{ appConfig.site?.title ?? 'CourseKata Resources' }}
         </NuxtLink>
         <UButton
           to="https://studio.nuxt.com"
