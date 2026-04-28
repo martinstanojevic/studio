@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a Nuxt 4 + `@nuxt/content` v3 + Nuxt UI v3 prototype that pulls markdown content from the [`martinstanojevic/studio-content`](https://github.com/martinstanojevic/studio-content) GitHub repo, presents a filterable instructor catalog and resource detail page, and is ready to be connected to `studio.nuxt.com` for content editing — so the team can evaluate whether Nuxt Studio is a viable CMS for the eventual production CourseKata Teaching Resources site.
+**Goal:** Build a Nuxt 4 + `@nuxt/content` v3 + Nuxt UI v4 prototype that pulls markdown content from the [`martinstanojevic/studio-content`](https://github.com/martinstanojevic/studio-content) GitHub repo, presents a filterable instructor catalog and resource detail page, and is ready to be connected to `studio.nuxt.com` for content editing — so the team can evaluate whether Nuxt Studio is a viable CMS for the eventual production CourseKata Teaching Resources site.
 
 **Architecture:** Two-repo split. App repo (this repo) owns the schema, pages, and components. Content repo owns the markdown files. `@nuxt/content` v3's GitHub source pulls content into the app's local SQLite store at build/dev. Studio is connected to the **content** repo so all editor commits land there. Filter, sort, and search state lives in URL query params; initial render is SSR with filters applied server-side; subsequent changes are client-side for instant feedback.
 
-**Tech Stack:** Nuxt 4, `@nuxt/content` v3 (with GitHub source), Nuxt UI v3, TypeScript, Zod (via `@nuxt/content`'s re-export), Studio module from NuxtLabs (exact package name verified in Task 1).
+**Tech Stack:** Nuxt 4 (`nuxt@4.4.2`), `@nuxt/content` v3 (`3.13.0`, with GitHub source), Nuxt UI v4 (`@nuxt/ui@4.7.0` — supports Nuxt 4), TypeScript, Zod (via `@nuxt/content`'s re-export), `nuxt-studio` (`1.6.1` — the current Nuxt Studio module; the older `@nuxthq/studio` package was archived 2025-09 and superseded).
 
 **Source spec:** [`docs/superpowers/specs/2026-04-28-coursekata-nuxt-studio-eval-design.md`](../specs/2026-04-28-coursekata-nuxt-studio-eval-design.md)
 
@@ -36,7 +36,7 @@
 | `app/utils/filterResources.ts` | Pure filter/sort/search function over an array of resources |
 | `app/types/resource.ts` | `Resource` TypeScript type derived from the schema |
 | `README.md` | Dev instructions — local run, Studio connection steps |
-| `.env.example` | Template for `NUXT_CONTENT_GITHUB_TOKEN` |
+| `.env.example` | Template for the GitHub auth token consumed by `content.config.ts` (no Nuxt-defined env var name; we pick `GITHUB_TOKEN`) |
 
 **Content repo (`martinstanojevic/studio-content`) — files this plan creates:**
 
@@ -97,16 +97,42 @@ Expected: a `3.x.y` version string (v3 supports Nuxt 4). Note any breaking chang
 
 Update the **Verified versions** subsection below with the resolved values before proceeding to Task 2. If any default in this plan (e.g. the `source` syntax in Task 3, the module name in Task 2) conflicts with the live docs, edit that task in place — the plan is the source of truth, and the executor is allowed to amend it inline when verification reveals a divergence.
 
-**Verified versions** (fill in during Step 5):
+**Verified versions** (filled 2026-04-28; sources: `npm view`, `content.nuxt.com/docs/*`, `nuxt.studio/raw/setup.md`, archived `github.com/nuxtlabs/studio-module` README):
 
 ```
-nuxt:           <fill from Step 3>
-@nuxt/content:  <fill from Step 1>
-@nuxt/ui:       <fill from Step 4>
-Studio module:  <package name from Step 2>
-GitHub-source token env var: <fill from Step 1>
-Schema-mirroring requirement for split repos: <yes/no/details from Step 2>
+nuxt:           4.4.2
+@nuxt/content:  3.13.0
+@nuxt/ui:       4.7.0   (v4 is current; supports Nuxt 4. Plan originally said "v3" — corrected.)
+Studio module:  nuxt-studio@1.6.1
+                (NOT @nuxthq/studio — that package is archived as of 2025-09-24 and
+                its README states "deprecated as it has been integrated in Nuxt
+                Content version 3". The current module is published as `nuxt-studio`
+                under the nuxt-content GitHub org.)
+GitHub-source token env var:
+                None defined by @nuxt/content. The docs only show the in-config shape:
+                  source: { repository: { url, auth: { username, token } } }
+                Token is read in content.config.ts via process.env.<NAME_WE_PICK>.
+                We standardize on GITHUB_TOKEN in this plan.
+                (Separately, the Studio module uses STUDIO_GITHUB_TOKEN at runtime
+                for publishing — that is for Studio, not for the build-time content
+                fetch.)
+Schema-mirroring requirement for split repos:
+                Not addressed by the docs. The Studio "Setup" guide assumes one repo
+                where the Nuxt app and the markdown both live. There is no documented
+                story for "schema in App repo, markdown in Content repo, Studio
+                connected to Content repo". This is therefore a known unknown for the
+                evaluation — captured as a verification step in Task 16, Step 2.
 ```
+
+**Source config keys for GitHub** (verified — no change needed in Task 3):
+```ts
+source: {
+  repository: 'https://github.com/owner/repo',  // string form OR
+  repository: { url, branch, auth: { username, token } },  // object form
+  include: 'path/glob/**/*.md',
+}
+```
+`branch` lives **inside** the `repository` object form, not as a top-level key.
 
 - [ ] **Step 6: Commit the verified values into the plan**
 
@@ -136,20 +162,13 @@ Expected output: scaffolded files including `package.json`, `nuxt.config.ts`, `a
 
 - [ ] **Step 2: Install runtime dependencies**
 
-Use the package names confirmed in Task 1. Default assumption (override if Task 1 found different names):
+Verified package names from Task 1:
 
 ```bash
-npm install @nuxt/content @nuxt/ui
+npm install @nuxt/content @nuxt/ui tailwindcss nuxt-studio
 ```
 
-Studio module — only if Task 1 confirmed it's a separate package:
-
-```bash
-# Replace with the verified name from Task 1, Step 2
-npm install @nuxthq/studio
-```
-
-If Task 1 found Studio is integrated into `@nuxt/content` v3, skip the second install.
+`nuxt-studio` (NOT the archived `@nuxthq/studio`) is the current Nuxt Studio module. The Studio docs recommend `npx nuxt module add nuxt-studio` as an equivalent shorthand that also wires the modules-array entry — either approach is fine; doing it manually keeps the lockfile diff smaller.
 
 - [ ] **Step 3: Register modules in `nuxt.config.ts`**
 
@@ -162,18 +181,27 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/content',
     '@nuxt/ui',
-    // Studio module — remove this line if Task 1 confirmed it's auto-registered.
-    '@nuxthq/studio',
+    'nuxt-studio',
   ],
   content: {
-    // Build-time GitHub source needs a token for higher rate limits even on public repos.
-    // Set NUXT_CONTENT_GITHUB_TOKEN locally; on Studio's preview infra it's injected automatically.
+    // Build-time GitHub source. Token is supplied via content.config.ts auth.token,
+    // which reads process.env.GITHUB_TOKEN. There is no @nuxt/content-defined env var
+    // name — we pick GITHUB_TOKEN for compatibility with GitHub CLI conventions.
+  },
+  studio: {
+    // Studio publishes commits to the *content* repo, not this app repo.
+    repository: {
+      provider: 'github',
+      owner: 'martinstanojevic',
+      repo: 'studio-content',
+      branch: 'main',
+    },
   },
   css: ['~/assets/css/main.css'],
 })
 ```
 
-If Task 1 returned a different name for the GitHub-source token env var, use that name in the comment.
+Note: the Studio docs allow Studio to auto-detect `owner`/`repo`/`branch` from CI env vars on Vercel/Netlify/GitHub Actions/GitLab CI. The explicit `studio.repository` block above is what makes Studio publish to the **content** repo when the app is deployed somewhere whose CI env points at the **app** repo (which is the split-repo case for this eval).
 
 - [ ] **Step 4: Create `assets/css/main.css` for Nuxt UI**
 
@@ -184,7 +212,7 @@ Path: `assets/css/main.css`
 @import "@nuxt/ui";
 ```
 
-This is the Nuxt UI v3 entry. If Task 1 documented a different setup (e.g. plugin-based), follow that.
+This is the Nuxt UI v4 entry (the v3/v4 install flow is the same: install `@nuxt/ui` and `tailwindcss`, register the module, import the two CSS layers).
 
 - [ ] **Step 5: Replace `app/app.vue` with a minimal layout**
 
@@ -255,9 +283,21 @@ export default defineContentConfig({
     resources: defineCollection({
       type: 'page',
       source: {
-        repository: 'https://github.com/martinstanojevic/studio-content',
+        // Object form so we can attach auth (and pin a branch if needed).
+        // The string-form `repository: 'https://github.com/owner/repo'` also works
+        // for unauthenticated public access, but anonymous GitHub API requests
+        // are rate-limited (60/hr per IP), which trips up `npm run dev` quickly.
+        repository: {
+          url: 'https://github.com/martinstanojevic/studio-content',
+          branch: 'main',
+          auth: {
+            // GitHub PAT auth uses the token as the password and any non-empty
+            // username — the GitHub API ignores the username for token auth.
+            username: 'token',
+            token: process.env.GITHUB_TOKEN ?? '',
+          },
+        },
         include: 'resources/**/*.md',
-        // branch defaults to the repo default branch; pin if needed
       },
       schema: z.object({
         title: z.string(),
@@ -294,7 +334,7 @@ export default defineContentConfig({
 })
 ```
 
-If Task 1, Step 1 found that the `source` config uses different key names, edit them here (e.g. `name`/`url`/`pattern` instead of `repository`/`include`).
+Source config keys (`repository`, `include`, optional inner `branch`/`auth`) are verified against the live `@nuxt/content` v3 docs in Task 1.
 
 - [ ] **Step 2: Create the TypeScript type for `Resource`**
 
@@ -346,14 +386,16 @@ export interface Resource extends ResourceFrontmatter {
 Path: `.env.example`
 
 ```
-# Personal access token with read access to public repos.
-# Without this, Nuxt Content's GitHub source falls back to anonymous requests
-# and you'll hit rate limits quickly during dev.
-# Use the env var name confirmed in Task 1, Step 1.
-NUXT_CONTENT_GITHUB_TOKEN=
+# GitHub Personal Access Token used by content.config.ts at build/dev time
+# to fetch markdown from martinstanojevic/studio-content via @nuxt/content's
+# GitHub source. Without it, anonymous GitHub API requests are limited to
+# 60/hr per IP, which is too low for a `npm run dev` loop.
+# Fine-grained PAT with read access to the studio-content repo is sufficient;
+# classic tokens with `public_repo` scope also work.
+GITHUB_TOKEN=
 ```
 
-If Task 1 confirmed a different env var name, use it. Add `.env.example` to git but keep `.env` itself in `.gitignore` (already there from the initial repo setup).
+`GITHUB_TOKEN` is our choice — `@nuxt/content` does not define a specific env var name. Add `.env.example` to git but keep `.env` itself in `.gitignore` (already there from the initial repo setup).
 
 - [ ] **Step 4: Sanity-check that `content.config.ts` parses**
 
@@ -564,15 +606,15 @@ cd /Users/martinstanojevic/projects/studio
 **Files:**
 - None (verification only)
 
-- [ ] **Step 1: Set up `.env` with a GitHub token (if needed)**
+- [ ] **Step 1: Set up `.env` with a GitHub token**
 
-If Task 1 found that the GitHub source needs a token for public repos:
+Anonymous GitHub API requests are capped at 60/hr per IP, which is exhausted quickly during dev. Add a token:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env`. Set the token to a GitHub Personal Access Token with `public_repo` scope (or no scope, which still grants public read but with higher rate limits than anonymous). Use the env var name from Task 1.
+Edit `.env`. Set `GITHUB_TOKEN` to a GitHub Personal Access Token with read access to `martinstanojevic/studio-content` (fine-grained PAT or classic with `public_repo` scope).
 
 - [ ] **Step 2: Start the dev server**
 
