@@ -292,12 +292,13 @@ export default defineContentConfig({
         repository: {
           url: 'https://github.com/martinstanojevic/studio-content',
           branch: 'main',
-          auth: {
-            // GitHub PAT auth uses the token as the password and any non-empty
-            // username — the GitHub API ignores the username for token auth.
-            username: 'token',
-            token: process.env.GITHUB_TOKEN ?? '',
-          },
+          // Only attach `auth` when a token is set — passing `token: ''`
+          // makes isomorphic-git send a 401 instead of falling back to
+          // anonymous access, so the spread keeps the key absent unless
+          // a token is actually configured.
+          ...(process.env.GITHUB_TOKEN
+            ? { auth: { username: 'token', token: process.env.GITHUB_TOKEN } }
+            : {}),
         },
         include: 'resources/**/*.md',
       },
