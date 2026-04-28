@@ -13,11 +13,6 @@
       <h1 class="text-3xl font-semibold mb-2">{{ resource.title }}</h1>
       <div class="flex items-center gap-3 text-sm text-muted mb-6">
         <UBadge :label="resource.type" variant="soft" />
-        <span class="flex items-center gap-1">
-          <UIcon name="i-lucide-clock" class="size-4" />
-          {{ resource.lengthMinutes }} min
-        </span>
-        <span v-if="resource.lastModified">Updated {{ formatDate(resource.lastModified) }}</span>
       </div>
 
       <p class="text-lg text-muted mb-8">{{ resource.description }}</p>
@@ -30,28 +25,6 @@
         <dl class="space-y-3 text-sm">
           <DetailRow label="Function" :value="resource.function" />
           <DetailRow label="Modality" :value="resource.modality" />
-          <DetailRow label="Coverage" :value="resource.coverage" />
-          <DetailRow label="Textbook versions" :value="resource.textbookVersions.join(', ')" />
-          <DetailRow
-            v-if="resource.extraMaterials.length"
-            label="Extra materials"
-            :value="resource.extraMaterials.join(', ')"
-          />
-        </dl>
-      </UCard>
-
-      <UCard v-if="resource.learningGoals.length">
-        <h3 class="font-semibold text-sm mb-3">Learning goals</h3>
-        <ul class="space-y-2 text-sm list-disc list-inside text-muted">
-          <li v-for="g in resource.learningGoals" :key="g">{{ g }}</li>
-        </ul>
-      </UCard>
-
-      <UCard v-if="resource.dataset">
-        <h3 class="font-semibold text-sm mb-3">Dataset</h3>
-        <dl class="space-y-2 text-sm">
-          <DetailRow label="Name" :value="resource.dataset.name" />
-          <DetailRow label="Variables" :value="resource.dataset.variableTypes.join(', ')" />
         </dl>
       </UCard>
     </aside>
@@ -66,7 +39,10 @@ import { computed } from 'vue'
 import type { Resource } from '~/types/resource'
 
 const route = useRoute()
-const slug = computed(() => String(route.params.slug))
+const slug = computed(() => {
+  const raw = route.params.slug
+  return Array.isArray(raw) ? raw.join('/') : String(raw)
+})
 
 const { data: resource } = await useAsyncData(`resource-${slug.value}`, () =>
   queryCollection('resources').path(`/resources/${slug.value}`).first(),
@@ -77,9 +53,4 @@ const backHref = computed(() => {
   return fromQuery || '/'
 })
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString(undefined, {
-    year: 'numeric', month: 'short', day: 'numeric',
-  })
-}
 </script>

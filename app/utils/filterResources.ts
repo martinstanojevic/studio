@@ -5,13 +5,7 @@ export interface ResourceFilters {
   types: string[]
   functions: string[]
   modalities: string[]
-  coverages: string[]
-  textbookVersions: string[]
-  topicTags: string[]
-  lengthMin: number | null
-  lengthMax: number | null
-  hasExtras: boolean | null
-  sort: 'lastUpdated' | 'title' | 'length'
+  sort: 'lastUpdated' | 'title'
 }
 
 export const EMPTY_FILTERS: ResourceFilters = {
@@ -19,12 +13,6 @@ export const EMPTY_FILTERS: ResourceFilters = {
   types: [],
   functions: [],
   modalities: [],
-  coverages: [],
-  textbookVersions: [],
-  topicTags: [],
-  lengthMin: null,
-  lengthMax: null,
-  hasExtras: null,
   sort: 'lastUpdated',
 }
 
@@ -34,15 +22,8 @@ export function applyFilters(resources: Resource[], f: ResourceFilters): Resourc
     if (f.types.length && !f.types.includes(r.type)) return false
     if (f.functions.length && !f.functions.includes(r.function)) return false
     if (f.modalities.length && !f.modalities.includes(r.modality)) return false
-    if (f.coverages.length && !f.coverages.includes(r.coverage)) return false
-    if (f.textbookVersions.length && !r.textbookVersions.some(v => f.textbookVersions.includes(v))) return false
-    if (f.topicTags.length && !r.topicTags.some(t => f.topicTags.includes(t))) return false
-    if (f.lengthMin != null && r.lengthMinutes < f.lengthMin) return false
-    if (f.lengthMax != null && r.lengthMinutes > f.lengthMax) return false
-    if (f.hasExtras === true && r.extraMaterials.length === 0) return false
-    if (f.hasExtras === false && r.extraMaterials.length > 0) return false
     if (q) {
-      const haystack = `${r.title} ${r.description} ${r.topicTags.join(' ')}`.toLowerCase()
+      const haystack = `${r.title} ${r.description}`.toLowerCase()
       if (!haystack.includes(q)) return false
     }
     return true
@@ -50,7 +31,6 @@ export function applyFilters(resources: Resource[], f: ResourceFilters): Resourc
 
   return [...filtered].sort((a, b) => {
     if (f.sort === 'title') return a.title.localeCompare(b.title)
-    if (f.sort === 'length') return a.lengthMinutes - b.lengthMinutes
     // lastUpdated, descending. Falls back to title when the date field is
     // missing (e.g. stat() failed) so ordering stays stable.
     const am = a.lastModified ?? ''
@@ -65,12 +45,6 @@ export function isFilterActive(f: ResourceFilters): boolean {
     f.q.length > 0 ||
     f.types.length > 0 ||
     f.functions.length > 0 ||
-    f.modalities.length > 0 ||
-    f.coverages.length > 0 ||
-    f.textbookVersions.length > 0 ||
-    f.topicTags.length > 0 ||
-    f.lengthMin != null ||
-    f.lengthMax != null ||
-    f.hasExtras != null
+    f.modalities.length > 0
   )
 }

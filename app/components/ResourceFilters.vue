@@ -44,68 +44,6 @@
         @update:model-value="(v: string[]) => update({ modalities: v })"
       />
     </UFormField>
-
-    <UFormField label="Coverage">
-      <USelectMenu
-        class="w-full"
-        :model-value="filters.coverages"
-        :items="coverageOptions"
-        multiple
-        placeholder="Any"
-        @update:model-value="(v: string[]) => update({ coverages: v })"
-      />
-    </UFormField>
-
-    <UFormField label="Textbook version">
-      <USelectMenu
-        class="w-full"
-        :model-value="filters.textbookVersions"
-        :items="textbookVersionOptions"
-        multiple
-        placeholder="Any"
-        @update:model-value="(v: string[]) => update({ textbookVersions: v })"
-      />
-    </UFormField>
-
-    <UFormField label="Topic tags">
-      <USelectMenu
-        class="w-full"
-        :model-value="filters.topicTags"
-        :items="topicTagOptions"
-        multiple
-        searchable
-        placeholder="Any"
-        @update:model-value="(v: string[]) => update({ topicTags: v })"
-      />
-    </UFormField>
-
-    <UFormField label="Length (minutes)">
-      <div class="flex items-center gap-2">
-        <UInput
-          type="number"
-          :model-value="filters.lengthMin ?? undefined"
-          placeholder="Min"
-          class="flex-1"
-          @update:model-value="(v: any) => update({ lengthMin: v === '' || v == null ? null : Number(v) })"
-        />
-        <span class="text-muted">–</span>
-        <UInput
-          type="number"
-          :model-value="filters.lengthMax ?? undefined"
-          placeholder="Max"
-          class="flex-1"
-          @update:model-value="(v: any) => update({ lengthMax: v === '' || v == null ? null : Number(v) })"
-        />
-      </div>
-    </UFormField>
-
-    <UFormField label="Extras">
-      <UCheckbox
-        :model-value="filters.hasExtras === true"
-        label="Requires extra materials"
-        @update:model-value="(v: boolean) => update({ hasExtras: v ? true : null })"
-      />
-    </UFormField>
   </aside>
 </template>
 
@@ -123,9 +61,6 @@ function uniq<T>(arr: T[]): T[] { return [...new Set(arr)] }
 const typeOptions = computed(() => uniq(props.resources.map(r => r.type)).sort())
 const functionOptions = computed(() => uniq(props.resources.map(r => r.function)).sort())
 const modalityOptions = computed(() => uniq(props.resources.map(r => r.modality)).sort())
-const coverageOptions = computed(() => uniq(props.resources.map(r => r.coverage)).sort())
-const textbookVersionOptions = computed(() => uniq(props.resources.flatMap(r => r.textbookVersions)).sort())
-const topicTagOptions = computed(() => uniq(props.resources.flatMap(r => r.topicTags)).sort())
 
 const active = computed(() => isFilterActive(filters.value))
 </script>

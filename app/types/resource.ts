@@ -14,7 +14,7 @@ import type { z } from '@nuxt/content'
 export interface ResourceFrontmatter {
   title: string
   description: string
-  type: 'JNB' | 'Worksheet' | 'Slide deck' | 'Activity' | 'Assessment' | 'Reading'
+  type: 'Worksheet' | 'Slide deck' | 'Activity' | 'Assessment' | 'Reading'
   function: 'Teaching' | 'Assessment' | 'Practice' | 'Discussion' | 'Project'
   modality: 'Online' | 'Paper-based' | 'Hybrid'
   coverage: 'Page' | 'Section' | 'Chapter' | 'Book' | 'Concept'

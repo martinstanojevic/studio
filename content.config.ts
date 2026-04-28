@@ -27,7 +27,7 @@ export default defineContentConfig({
         title: z.string(),
         description: z.string(),
 
-        type: z.enum(['JNB', 'Worksheet', 'Slide deck', 'Activity', 'Assessment', 'Reading']),
+        type: z.enum(['Worksheet', 'Slide deck', 'Activity', 'Assessment', 'Reading']),
         function: z.enum(['Teaching', 'Assessment', 'Practice', 'Discussion', 'Project']),
         modality: z.enum(['Online', 'Paper-based', 'Hybrid']),
         coverage: z.enum(['Page', 'Section', 'Chapter', 'Book', 'Concept']),
