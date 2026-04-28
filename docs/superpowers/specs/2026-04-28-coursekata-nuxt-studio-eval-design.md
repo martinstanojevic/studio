@@ -18,7 +18,7 @@ This is an **internal evaluation prototype**, not a shippable product or stakeho
 - Resource **detail / preview page** (`/resources/[slug]`) — full metadata + rendered markdown body
 - Rich `resources` content collection with the full structured schema derived from the spec
 - ~10 sample resources covering enough enum diversity to make filtering meaningful
-- Full Nuxt Studio integration: GitHub-backed repo connected at `studio.nuxt.com`, edits flowing as commits
+- Full Nuxt Studio integration: content stored in a **separate GitHub repo** ([`martinstanojevic/studio-content`](https://github.com/martinstanojevic/studio-content)) connected at `studio.nuxt.com`, edits flowing as commits to that repo
 
 ### Out of scope (explicit)
 
@@ -35,14 +35,27 @@ This is an **internal evaluation prototype**, not a shippable product or stakeho
 
 ## Architecture
 
+Two repositories, separated by responsibility:
+
 ```
-Nuxt 4  +  @nuxt/content v3  +  Nuxt UI v3  +  TypeScript
+┌──────────────────────────────────────┐         ┌──────────────────────────────┐
+│  App repo (this repo)                │         │  Content repo                │
+│  ──────────────────                  │  github │  martinstanojevic/           │
+│  Nuxt 4 + @nuxt/content + Nuxt UI    │ ◀─────  │    studio-content            │
+│  Schema, pages, components, build    │  source │  resources/*.md (Studio-     │
+│                                      │         │    edited frontmatter+body)  │
+└──────────────────────────────────────┘         └──────────────────────────────┘
+                                                              ▲
+                                                              │ commits
+                                                              │
+                                                       studio.nuxt.com
+                                                       (editor + live preview)
+```
 
-content/
-  resources/
-    *.md                       # one resource per file (frontmatter + body)
+**App repo layout:**
 
-content.config.ts              # Zod schema for the `resources` collection
+```
+content.config.ts              # Zod schema + GitHub source config for `resources`
 nuxt.config.ts                 # registers Studio module
 
 app/
@@ -57,6 +70,15 @@ app/
 
 public/
 ```
+
+**Content repo layout** (`martinstanojevic/studio-content`):
+
+```
+resources/
+  *.md                         # one resource per file (frontmatter + body)
+```
+
+The app repo contains **no `content/` directory** — `@nuxt/content` v3's GitHub source pulls files from `martinstanojevic/studio-content` at build/dev time and indexes them into the local SQLite store. Studio is connected to the *content* repo, so all editor commits land there, not in the app repo.
 
 ### Stack rationale
 
@@ -79,7 +101,10 @@ export default defineContentConfig({
   collections: {
     resources: defineCollection({
       type: 'page',
-      source: 'resources/*.md',
+      source: {
+        repository: 'https://github.com/martinstanojevic/studio-content',
+        include: 'resources/**/*.md',
+      },
       schema: z.object({
         title: z.string(),
         shortDescription: z.string(),
@@ -177,7 +202,7 @@ Markdown body holds the longer teaching notes / preview / "what happens in the c
 
 ## Sample Data
 
-~10 resources written as `content/resources/*.md` files. Distribution chosen so every filter facet has at least two values to filter between:
+~10 resources written as `resources/*.md` files **in the `martinstanojevic/studio-content` repo**. Distribution chosen so every filter facet has at least two values to filter between:
 
 - Mix of `type`: at least 3 JNBs, 2 worksheets, 1 slide deck, 1 activity, 1 assessment, 1 reading
 - Mix of `function`, `modality`, `coverage`, `textbookVersions`
@@ -190,13 +215,29 @@ Sample bodies are short but realistic (a paragraph or two of teaching notes plus
 
 ## Studio Integration Workflow
 
-1. Scaffold the app locally; iterate until catalog + detail pages render correctly with sample content.
-2. Initialize a Git repo and push to a fresh GitHub repo on the user's account (public or private — user chooses at push time).
-3. User signs in to `studio.nuxt.com` with that GitHub account, creates a new project pointing at the repo, grants repo access.
-4. Studio reads `content.config.ts`, builds editor forms, spins up preview.
-5. Manual eval pass against the criteria below.
+This is a **two-repo** setup:
 
-The user performs steps 3 and 5 manually; everything else is in the implementation plan.
+- **App repo** (this repo) — Nuxt app, schema, pages, components.
+- **Content repo** — [`martinstanojevic/studio-content`](https://github.com/martinstanojevic/studio-content) — markdown files only.
+
+Steps:
+
+1. Confirm the content repo `martinstanojevic/studio-content` exists on GitHub. If not, create it (the user does this; instructions go in the implementation plan).
+2. Seed the content repo with the ~10 sample `resources/*.md` files (initial commit pushed by the implementation).
+3. Scaffold the app locally with `@nuxt/content` v3 configured to pull from the content repo via its GitHub source. Verify catalog + detail pages render against the live remote content during dev.
+4. Push the app repo to GitHub on the user's account (public or private — user chooses at push time).
+5. User signs in to `studio.nuxt.com` with the GitHub account that owns both repos, creates a new project pointing at **`martinstanojevic/studio-content`** (the content repo, not the app repo), and grants repo access.
+6. Studio reads the schema definition (which it discovers either via the connected app or via a `nuxt.schema.ts` mirrored into the content repo — implementation plan will pin which mechanism Studio v3 currently expects), builds editor forms, spins up preview against the app.
+7. Manual eval pass against the criteria below.
+
+The user performs steps 1, 5, and 7 manually; the rest is in the implementation plan.
+
+### Why two repos
+
+- Editors (CourseKata content team) only need access to one repo containing nothing but markdown — no risk of touching app code.
+- App developers can iterate on the Nuxt code without polluting content history with build/code commits.
+- Mirrors a realistic production setup where a content team and an engineering team work independently.
+- This is also the configuration that most stresses Studio's content-source plumbing — exactly what an internal eval should be testing.
 
 ## Evaluation Criteria
 
@@ -213,6 +254,8 @@ These criteria become the eval report deliverable; they are not implementation t
 ## Risks and Open Questions
 
 - **Studio module package name:** Nuxt renamed several modules during the v3→v4 transition. The implementation plan will verify the current package name and pin it before installation, rather than guessing.
+- **Schema discovery across repos:** Because the schema lives in the app repo (`content.config.ts`) but Studio is connected to the content repo, the implementation plan will need to confirm how Studio v3 discovers the schema in this split-repo configuration. Options include: (a) Studio inspecting the connected app deployment, (b) mirroring the schema as `nuxt.schema.ts` into the content repo, or (c) Studio supporting a "linked app repo" reference. This is itself an eval finding.
+- **GitHub source caching / dev loop:** `@nuxt/content` v3's GitHub source pulls remote files; the implementation plan will configure local dev so editors can see changes promptly without being throttled by GitHub API limits or stale caches.
 - **Nested object editing:** the `dataset` field is the most complex part of the schema; if Studio cannot edit nested objects gracefully, the eval surfaces that as a finding (not a blocker for the eval itself).
 - **Conditional fields:** `jnbSubtype` is only meaningful when `type === 'JNB'`. Studio likely won't enforce conditional visibility from a Zod schema; this is expected and noted as part of the eval.
 - **No tests:** intentional. Adding tests to a throwaway eval prototype is yak-shaving. Re-evaluate if any of this code is reused in the production build.
