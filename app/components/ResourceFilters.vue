@@ -11,8 +11,9 @@
       />
     </div>
 
-    <UFormField label="Type">
+    <UFormField label="Type" class="w-full">
       <USelectMenu
+        class="w-full"
         :model-value="filters.types"
         :items="typeOptions"
         multiple
@@ -24,6 +25,7 @@
 
     <UFormField label="Function">
       <USelectMenu
+        class="w-full"
         :model-value="filters.functions"
         :items="functionOptions"
         multiple
@@ -34,6 +36,7 @@
 
     <UFormField label="Modality">
       <USelectMenu
+        class="w-full"
         :model-value="filters.modalities"
         :items="modalityOptions"
         multiple
@@ -44,6 +47,7 @@
 
     <UFormField label="Coverage">
       <USelectMenu
+        class="w-full"
         :model-value="filters.coverages"
         :items="coverageOptions"
         multiple
@@ -54,6 +58,7 @@
 
     <UFormField label="Textbook version">
       <USelectMenu
+        class="w-full"
         :model-value="filters.textbookVersions"
         :items="textbookVersionOptions"
         multiple
@@ -64,6 +69,7 @@
 
     <UFormField label="Topic tags">
       <USelectMenu
+        class="w-full"
         :model-value="filters.topicTags"
         :items="topicTagOptions"
         multiple
@@ -95,6 +101,7 @@
 
     <UFormField label="Extra materials needed">
       <USelectMenu
+        class="w-full"
         :model-value="extraMaterialsValue"
         :items="extraMaterialsOptions"
         placeholder="Any"

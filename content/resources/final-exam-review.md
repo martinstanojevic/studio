@@ -1,28 +1,6 @@
 ---
 title: Final exam review packet
-shortDescription: A book-spanning review packet covering all major chapters with mixed practice problems.
-whatStudentsDo: Work through 30 mixed-topic practice problems and self-grade against the answer key.
-type: Assessment
-function: Assessment
-modality: Paper-based
 coverage: Book
-textbookVersions:
-  - ABC v6.0
-learningGoals:
-  - Recognize which chapter a problem belongs to from the wording alone
-  - Apply techniques across chapter boundaries on novel problems
-  - Identify personal weak spots before the actual exam
-topicTags:
-  - exam review
-  - mixed practice
-  - synthesis
-lengthMinutes: 75
-extraMaterialsNeeded: true
-extraMaterialsList:
-  - scratch paper
-  - calculator
-  - pencil
-studentDataCollectionRequired: false
 dataset:
   name: review-mixed
   source: Aggregated from chapter-end exercises across the book
@@ -35,7 +13,29 @@ dataset:
   topicTags:
     - mixed topics
     - exam-style
+extraMaterialsList:
+  - scratch paper
+  - calculator
+  - pencil
+extraMaterialsNeeded: true
+function: Assessment
 lastUpdated: 2026-04-26
+learningGoals:
+  - Recognize which chapter a problem belongs to from the wording alone
+  - Apply techniques across chapter boundaries on novel problems
+  - Identify personal weak spots before the actual exam
+lengthMinutes: 75
+modality: Paper-based
+shortDescription: A book-spanning review packet covering all major chapters with mixed practice problems.
+studentDataCollectionRequired: false
+textbookVersions:
+  - ABC v6.0
+topicTags:
+  - exam review
+  - mixed practice
+  - synthesis
+type: Assessment
+whatStudentsDo: Work through 30 mixed-topic practice problems and self-grade against the answer key.
 ---
 
 ## What happens in the classroom

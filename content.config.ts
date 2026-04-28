@@ -4,23 +4,25 @@ export default defineContentConfig({
   collections: {
     resources: defineCollection({
       type: 'page',
-      source: {
-        // Object form so we can attach auth (and pin a branch if needed).
-        // The string-form `repository: 'https://github.com/owner/repo'` also works
-        // for unauthenticated public access, but anonymous GitHub API requests
-        // are rate-limited (60/hr per IP), which trips up `npm run dev` quickly.
-        repository: {
-          url: 'https://github.com/martinstanojevic/studio',
-          branch: 'main',
-          // Only attach auth when a token is set; otherwise GitHub treats the
-          // request as anonymous (60/hr rate limit, fine for a small eval repo).
-          // Sending an empty `auth.token` produces a 401, not anonymous fallback.
-          ...(process.env.GITHUB_TOKEN
-            ? { auth: { username: 'token', token: process.env.GITHUB_TOKEN } }
-            : {}),
-        },
-        include: 'resources/**/*.md',
-      },
+      // Local filesystem source for development
+      source: 'resources/**/*.md',
+      // source: {
+      //   // Object form so we can attach auth (and pin a branch if needed).
+      //   // The string-form `repository: 'https://github.com/owner/repo'` also works
+      //   // for unauthenticated public access, but anonymous GitHub API requests
+      //   // are rate-limited (60/hr per IP), which trips up `npm run dev` quickly.
+      //   repository: {
+      //     url: 'https://github.com/martinstanojevic/studio',
+      //     branch: 'main',
+      //     // Only attach auth when a token is set; otherwise GitHub treats the
+      //     // request as anonymous (60/hr rate limit, fine for a small eval repo).
+      //     // Sending an empty `auth.token` produces a 401, not anonymous fallback.
+      //     ...(process.env.GITHUB_TOKEN
+      //       ? { auth: { username: 'token', token: process.env.GITHUB_TOKEN } }
+      //       : {}),
+      //   },
+      //   include: 'resources/**/*.md',
+      // },
       schema: z.object({
         title: z.string(),
         shortDescription: z.string(),
