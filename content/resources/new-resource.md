@@ -1,11 +1,12 @@
 ---
 title: New-resource
-description: awd
 coverage: Section
 dataset:
   variableTypes: []
   name: awd
+description: awd
 function: Assessment
+lastModified: 2026-04-28T17:14:32.669Z
 learningGoals:
   - wawd
 lengthMinutes: 26
@@ -18,7 +19,6 @@ textbookVersions:
 topicTags:
   - awd
 type: Worksheet
-extraMaterials: []
 ---
 
 # Test test test
