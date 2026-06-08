@@ -13,6 +13,9 @@ export function useTeachingResources() {
   const activeType = ref<ResourceType | null>(null);
   const bookCode = ref<BookCode | null>(null);
   const chapter = ref<string | null>(null);
+  // Tag filter uses AND semantics: a resource must carry every selected tag.
+  // Held as a Set so adds/removes are O(1) and reactivity is straightforward.
+  const selectedTags = ref(new Set<string>());
 
   // Load all published resources once. With ≤ a few hundred resources, in-memory
   // filtering is simpler and faster than re-querying on every filter change.
@@ -35,8 +38,13 @@ export function useTeachingResources() {
     })),
   );
 
-  // Apply filters client-side.
-  const filteredItems = computed<TeachingResourceItem[]>(() => {
+  // ── Two-stage filtering ────────────────────────────────────────────────────
+  // We split filtering into "before tags" and "after tags" so the tag chip row
+  // can derive its list of available tags from the pre-tag set. Otherwise
+  // selecting a tag would prune the chip list — confusing UX where chips
+  // disappear under the user's cursor.
+
+  const preTagFiltered = computed<TeachingResourceItem[]>(() => {
     let result = allItems.value;
 
     if (bookCode.value) {
@@ -67,6 +75,14 @@ export function useTeachingResources() {
     return result;
   });
 
+  const filteredItems = computed<TeachingResourceItem[]>(() => {
+    if (selectedTags.value.size === 0) return preTagFiltered.value;
+    return preTagFiltered.value.filter((r) =>
+      // AND: resource must carry every selected tag.
+      [...selectedTags.value].every((t) => r.tags.includes(t)),
+    );
+  });
+
   // Distinct chapter list, scoped to the currently selected book if any.
   const availableChapters = computed<string[]>(() => {
     const pool = bookCode.value
@@ -81,6 +97,16 @@ export function useTeachingResources() {
     return [...set].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
   });
 
+  // Tag chips are derived from the pre-tag set so they don't disappear when
+  // the user clicks one. Sorted alphabetically for a stable strip.
+  const availableTags = computed<string[]>(() => {
+    const set = new Set<string>();
+    for (const r of preTagFiltered.value) {
+      for (const t of r.tags) set.add(t);
+    }
+    return [...set].sort();
+  });
+
   const totalItems = computed(() => filteredItems.value.length);
   const totalPages = computed(() => Math.max(1, Math.ceil(totalItems.value / PAGE_SIZE)));
 
@@ -90,9 +116,9 @@ export function useTeachingResources() {
   });
 
   // Reset page to 1 whenever a filter changes.
-  watch([search, activeType, bookCode, chapter], () => {
+  watch([search, activeType, bookCode, chapter, selectedTags], () => {
     page.value = 1;
-  });
+  }, { deep: true });
 
   function setPage(newPage: number) {
     page.value = newPage;
@@ -116,6 +142,19 @@ export function useTeachingResources() {
     chapter.value = value;
   }
 
+  function toggleTag(tag: string) {
+    // Replace the Set so reactivity fires (mutating in place doesn't trigger
+    // computed re-eval reliably across all Vue versions).
+    const next = new Set(selectedTags.value);
+    if (next.has(tag)) next.delete(tag);
+    else next.add(tag);
+    selectedTags.value = next;
+  }
+
+  function clearTags() {
+    selectedTags.value = new Set();
+  }
+
   return {
     page,
     pageSize: PAGE_SIZE,
@@ -123,10 +162,12 @@ export function useTeachingResources() {
     activeType,
     bookCode,
     chapter,
+    selectedTags,
     items,
     filteredItems,
     allItems,
     availableChapters,
+    availableTags,
     totalItems,
     totalPages,
     status,
@@ -135,6 +176,8 @@ export function useTeachingResources() {
     toggleType,
     setBook,
     setChapter,
+    toggleTag,
+    clearTags,
     refresh,
   };
 }

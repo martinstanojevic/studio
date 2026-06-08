@@ -168,17 +168,6 @@ function roleBadge(role: string | undefined) {
       </div>
     </div>
 
-    <!-- Dataset info -->
-    <div v-if="detail.datasetName" class="mb-6">
-      <h2 class="font-display mb-3 text-lg font-semibold text-[var(--ck-indigo)]">Dataset</h2>
-      <div class="rounded-[10px] border-[1.5px] border-[var(--border-light)] bg-white px-5 py-4">
-        <div class="font-semibold text-[var(--text-primary)]">{{ detail.datasetName }}</div>
-        <p v-if="detail.datasetDescription" class="mt-1 text-sm text-[var(--text-secondary)]">
-          {{ detail.datasetDescription }}
-        </p>
-      </div>
-    </div>
-
     <!-- Tags -->
     <div v-if="detail.tags?.length" class="mb-4">
       <div class="flex flex-wrap gap-1.5">

@@ -13,8 +13,6 @@ export default defineContentConfig({
         chapter: z.string().optional(),
         duration: z.number().optional(),
         tags: z.array(z.string()).default([]),
-        datasetName: z.string().optional(),
-        datasetDescription: z.string().optional(),
         // Each resource can attach multiple files (e.g., student + teacher
         // versions of a notebook). `path` is a URL under /public, `label` is
         // the display name, and `role` identifies the audience for filtering

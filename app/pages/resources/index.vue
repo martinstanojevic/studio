@@ -17,9 +17,11 @@ const {
   activeType,
   bookCode,
   chapter,
+  selectedTags,
   items,
   allItems,
   availableChapters,
+  availableTags,
   totalItems,
   totalPages,
   status,
@@ -27,6 +29,8 @@ const {
   setType,
   setBook,
   setChapter,
+  toggleTag,
+  clearTags,
 } = useTeachingResources();
 
 // ── View / selection state ─────────────────────────────────────────────────
@@ -51,9 +55,13 @@ function clearSelection() {
 
 // Any filter change clears in-flight selection so the user isn't operating
 // on items that scrolled out of view.
-watch([search, activeType, bookCode, chapter, page], () => {
-  clearSelection();
-});
+watch(
+  [search, activeType, bookCode, chapter, selectedTags, page],
+  () => {
+    clearSelection();
+  },
+  { deep: true },
+);
 
 function onCardActivate(resource: TeachingResourceItem) {
   if (selectionMode.value) {
@@ -163,9 +171,9 @@ function handleSlashFocus(e: KeyboardEvent) {
   toolbarRef.value?.focusSearch();
 }
 
-// Hide the featured row once the user starts searching — it becomes visual
-// noise once they've expressed a specific intent.
-const isSearching = computed(() => !!search.value);
+// Hide the featured row once the user has narrowed by search or tags — it
+// becomes visual noise once they've expressed a specific intent.
+const isNarrowed = computed(() => !!search.value || selectedTags.value.size > 0);
 </script>
 
 <template>
@@ -184,7 +192,7 @@ const isSearching = computed(() => !!search.value);
     </div>
 
     <!-- Browse toolbar (chapter + type + search) -->
-    <div class="mb-8">
+    <div class="mb-4">
       <TeachingResourcesBrowseToolbar
         ref="toolbarRef"
         v-model:chapter="chapterModel"
@@ -194,8 +202,40 @@ const isSearching = computed(() => !!search.value);
       />
     </div>
 
-    <!-- Featured row (hidden once user starts searching) -->
-    <div v-if="!isSearching" class="mb-10">
+    <!-- Tag chip strip — AND filter, derived from current book/chapter/type/search context -->
+    <div v-if="availableTags.length" class="mb-8 flex flex-wrap items-center gap-2">
+      <span
+        class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-tertiary)] mr-1"
+      >
+        Tags
+      </span>
+      <button
+        v-for="tag in availableTags"
+        :key="tag"
+        type="button"
+        class="text-xs px-3 py-[5px] rounded-full border-[1.5px] cursor-pointer transition-all duration-150"
+        :class="
+          selectedTags.has(tag)
+            ? 'border-(--ck-primary) text-(--ck-primary) bg-(--ck-primary-light) font-semibold'
+            : 'border-(--border-light) bg-white text-(--text-secondary) font-medium hover:border-(--ck-primary-mid) hover:text-(--ck-primary)'
+        "
+        :aria-pressed="selectedTags.has(tag)"
+        @click="toggleTag(tag)"
+      >
+        {{ tag }}
+      </button>
+      <button
+        v-if="selectedTags.size > 0"
+        type="button"
+        class="text-xs ml-1 text-[var(--text-tertiary)] underline-offset-2 hover:text-[var(--ck-primary)] hover:underline"
+        @click="clearTags"
+      >
+        clear ({{ selectedTags.size }})
+      </button>
+    </div>
+
+    <!-- Featured row (hidden once user starts searching / tag-filtering) -->
+    <div v-if="!isNarrowed" class="mb-10">
       <TeachingResourcesFeaturedRow :resources="allItems" />
     </div>
 
