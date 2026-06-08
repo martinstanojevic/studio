@@ -1,2 +1,103 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+/* ── Color Scales & Theme ──────────────────────────────── */
+
+@theme static {
+  /* Primary Brand — purple by default */
+  --color-primary-50: #f4f0fb;
+  --color-primary-100: #e6dcf5;
+  --color-primary-200: #cdb9eb;
+  --color-primary-300: #a98ad9;
+  --color-primary-400: #7c55c2;
+  --color-primary-500: #3a1d8e;
+  --color-primary-600: #32187a;
+  --color-primary-700: #281362;
+  --color-primary-800: #1c0d47;
+  --color-primary-900: #100728;
+  --color-primary-950: #080313;
+
+  /* Coral - Secondary / CTAs */
+  --color-coral-50: #fff0f3;
+  --color-coral-100: #ffe0e8;
+  --color-coral-200: #ffc1cf;
+  --color-coral-300: #ffa3b6;
+  --color-coral-400: #ff87a0;
+  --color-coral-500: #ff6b8a;
+  --color-coral-600: #e85574;
+  --color-coral-700: #c33e5c;
+  --color-coral-800: #962a43;
+  --color-coral-900: #6b1a2d;
+  --color-coral-950: #400e1a;
+
+  /* Teal - Active & Success States */
+  --color-teal-50: #eefafa;
+  --color-teal-100: #d4f5f5;
+  --color-teal-200: #a8ebeb;
+  --color-teal-300: #4ddede;
+  --color-teal-400: #00c9c9;
+  --color-teal-500: #00a5a5;
+  --color-teal-600: #008585;
+  --color-teal-700: #006565;
+  --color-teal-800: #004a4a;
+  --color-teal-900: #003030;
+  --color-teal-950: #001818;
+
+  /* Indigo - Navigation & Dark Backgrounds */
+  --color-indigo-50: #f5f0ff;
+  --color-indigo-100: #e8deff;
+  --color-indigo-200: #c9b4ff;
+  --color-indigo-300: #a080f0;
+  --color-indigo-400: #7b52d4;
+  --color-indigo-500: #5b3abf;
+  --color-indigo-600: #3a1d8e;
+  --color-indigo-700: #2a1066;
+  --color-indigo-800: #1e0a46;
+  --color-indigo-900: #140630;
+  --color-indigo-950: #0a0318;
+}
+
+/* ── Semantic Tokens ───────────────────────────────────── */
+
+:root {
+  --ck-indigo: #1e0a46;
+  --ck-primary: #3a1d8e;
+  --ck-primary-mid: #5b3abf;
+  --ck-primary-light: #ebe6f7;
+  --ck-primary-wash: #f7f5fc;
+  --ck-coral: #ff6b8a;
+  --ck-coral-light: #ffe0e8;
+  --ck-teal: #00c9c9;
+  --ck-teal-dark: #00a5a5;
+  --ck-teal-light: #d4f5f5;
+
+  --bg-page: #f4f2f9;
+  --bg-card: #ffffff;
+  --bg-hover: #f9f7ff;
+
+  --border-light: #eae6f2;
+  --border-medium: #ddd8ea;
+
+  --text-primary: #1e0a46;
+  --text-secondary: #5c5478;
+  --text-tertiary: #6e687f;
+  --text-on-dark: #ffffff;
+
+  --font-display: 'Covik Sans', Georgia, serif;
+  --font-body: 'PP Mori', Arial, sans-serif;
+  --font-mono: 'Overpass Mono', 'SF Mono', monospace;
+}
+
+/* ── Typography Utilities ──────────────────────────────── */
+
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+@utility font-body {
+  font-family: var(--font-body);
+}
+
+@utility font-mono {
+  font-family: var(--font-mono);
+}
