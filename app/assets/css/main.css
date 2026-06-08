@@ -88,6 +88,26 @@
   --font-mono: 'Overpass Mono', 'SF Mono', monospace;
 }
 
+/* ── Base Styles ───────────────────────────────────────── */
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+button,
+[role='button'],
+a[href],
+summary {
+  cursor: pointer;
+}
+
 /* ── Typography Utilities ──────────────────────────────── */
 
 @utility font-display {

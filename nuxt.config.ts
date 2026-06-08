@@ -16,6 +16,13 @@ export default defineNuxtConfig({
       branch: 'main',
     },
   },
+  // The CourseKata design is a light theme. Pin the color mode to 'light' so
+  // Nuxt UI / Tailwind don't flip to dark based on OS preference and clash with
+  // the CK background and semantic tokens.
+  colorMode: {
+    preference: 'light',
+    fallback: 'light',
+  },
   hooks: {
     // Auto-derive `lastModified` from the file's mtime instead of asking
     // authors to maintain a `lastUpdated` frontmatter field by hand. Runs at
