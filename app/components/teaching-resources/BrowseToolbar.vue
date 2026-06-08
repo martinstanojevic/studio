@@ -7,6 +7,7 @@ const props = defineProps<{
 
 const chapter = defineModel<string | null>('chapter', { required: true });
 const type = defineModel<ResourceType | null>('type', { required: true });
+const search = defineModel<string>('search', { required: true });
 
 const chapterItems = computed(() => [
   { label: 'All chapters', value: null as string | null },
@@ -17,11 +18,21 @@ const typeItems = computed(() => [
   { label: 'All types', value: null as ResourceType | null },
   ...RESOURCE_TYPES.map((rt) => ({ label: rt.label, value: rt.value as ResourceType | null })),
 ]);
+
+// Parent uses `/` to focus the search input; expose a focus method so it
+// doesn't have to query the DOM directly.
+const searchInputRef = ref<{ inputRef?: HTMLInputElement } | null>(null);
+
+defineExpose({
+  focusSearch() {
+    searchInputRef.value?.inputRef?.focus();
+  },
+});
 </script>
 
 <template>
   <div
-    class="flex flex-wrap items-center gap-4 rounded-[10px] bg-[var(--ck-primary-light)] px-5 py-3"
+    class="flex flex-wrap items-center gap-3 rounded-[10px] bg-[var(--ck-primary-light)] px-5 py-3"
   >
     <span class="text-sm font-semibold text-[var(--ck-indigo)]">browse resources</span>
 
@@ -45,12 +56,26 @@ const typeItems = computed(() => [
 
     <div class="flex-1" />
 
-    <NuxtLink
-      to="/resources/search"
-      class="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--ck-indigo)] no-underline hover:text-[var(--ck-primary)]"
+    <!-- Search input. Replaces the old "advanced search" toggle. -->
+    <UInput
+      ref="searchInputRef"
+      v-model="search"
+      icon="i-lucide-search"
+      placeholder="Search resources…"
+      class="w-72"
     >
-      advanced search
-      <UIcon name="i-lucide-search" class="h-4 w-4" />
-    </NuxtLink>
+      <template #trailing>
+        <UKbd v-if="!search" value="/" />
+        <UButton
+          v-else
+          color="neutral"
+          variant="link"
+          icon="i-lucide-x"
+          size="sm"
+          aria-label="Clear search"
+          @click="search = ''"
+        />
+      </template>
+    </UInput>
   </div>
 </template>
