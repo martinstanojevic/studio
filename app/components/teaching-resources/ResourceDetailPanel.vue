@@ -19,10 +19,22 @@ const formattedDuration = computed(() => {
   return `${props.resource.duration} min`;
 });
 
-const fileName = computed(() => {
-  if (!props.resource?.file) return null;
-  return props.resource.file.split('/').pop() ?? null;
-});
+const files = computed(() => props.resource?.files ?? []);
+
+const bundleHref = computed(() =>
+  props.resource ? `/api/resources/${props.resource.slug}/download` : '#',
+);
+
+function fileBaseName(path: string) {
+  return decodeURIComponent(path.split('/').pop() ?? path);
+}
+
+function roleBadge(role: string | undefined) {
+  if (role === 'teacher') return { label: 'Teacher', class: 'bg-[var(--ck-coral-light)] text-[#c43a5a]' };
+  if (role === 'student') return { label: 'Student', class: 'bg-[var(--ck-primary-light)] text-[var(--ck-primary)]' };
+  if (role === 'supplement') return { label: 'Supplement', class: 'bg-[var(--ck-teal-light)] text-[var(--ck-teal-dark)]' };
+  return null;
+}
 
 function handleOpenChange(val: boolean) {
   if (!val) emit('close');
@@ -95,15 +107,50 @@ function handleOpenChange(val: boolean) {
               </label>
               <div class="text-[13px] text-[var(--text-primary)]">{{ formattedDuration }}</div>
             </div>
-            <div v-if="fileName">
-              <label class="mb-0.5 block text-[11px] font-medium text-[var(--text-tertiary)]">
-                File
-              </label>
-              <div class="font-mono text-[11px] text-[var(--text-secondary)] break-all">
-                {{ fileName }}
-              </div>
-            </div>
           </div>
+        </div>
+
+        <!-- Attached files -->
+        <div v-if="files.length > 0" class="mb-5">
+          <div
+            class="mb-2 flex items-center justify-between gap-3 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-primary"
+          >
+            <span>Files · {{ files.length }}</span>
+          </div>
+          <ul class="divide-y divide-[var(--border-light)] rounded-[8px] border-[1.5px] border-[var(--border-light)] bg-white">
+            <li
+              v-for="f in files"
+              :key="f.path"
+              class="flex items-center gap-2 px-3 py-2"
+            >
+              <UIcon name="i-lucide-file" class="h-3.5 w-3.5 text-[var(--text-tertiary)] shrink-0" />
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-[12px] font-medium text-[var(--text-primary)]">{{ f.label }}</span>
+                  <span
+                    v-if="roleBadge(f.role)"
+                    :class="[
+                      'rounded-[3px] px-1 py-[1px] font-mono text-[9px] font-semibold uppercase tracking-[0.06em]',
+                      roleBadge(f.role)!.class,
+                    ]"
+                  >
+                    {{ roleBadge(f.role)!.label }}
+                  </span>
+                </div>
+                <div class="mt-0.5 font-mono text-[10px] text-[var(--text-tertiary)] break-all">
+                  {{ fileBaseName(f.path) }}
+                </div>
+              </div>
+              <a
+                :href="f.path"
+                download
+                class="rounded-full p-1.5 text-[var(--text-secondary)] no-underline transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--ck-primary)]"
+                aria-label="Download file"
+              >
+                <UIcon name="i-lucide-download" class="h-3.5 w-3.5" />
+              </a>
+            </li>
+          </ul>
         </div>
 
         <!-- Tags -->
@@ -127,13 +174,13 @@ function handleOpenChange(val: boolean) {
         <!-- Actions -->
         <div class="mt-4 flex flex-col gap-2">
           <a
-            v-if="resource.file"
-            :href="resource.file"
+            v-if="files.length > 0"
+            :href="bundleHref"
             download
             class="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white no-underline transition-colors hover:bg-[var(--ck-primary-mid)]"
           >
             <UIcon name="i-lucide-download" class="h-4 w-4" />
-            Download Resource
+            Download all (.zip)
           </a>
           <NuxtLink
             :to="`/resources/${resource.slug}`"

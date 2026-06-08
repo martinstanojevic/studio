@@ -8,7 +8,13 @@ chapter: Ch. 3
 description: A short, paper-based formative quiz covering the key ideas from sections 3.1–3.4 — reading histograms, describing distribution shape, and interpreting center and spread.
 duration: 20
 featured: false
-file: /resources/3.1-3.4%20Mini%20Quiz.docx
+files:
+  - path: /resources/3.1-3.4%20Mini%20Quiz.docx
+    label: Mini Quiz — Student
+    role: student
+  - path: /resources/3.1-3.4%20Mini%20Quiz_COMPLETE.docx
+    label: Mini Quiz — Teacher (answer key)
+    role: teacher
 published: true
 tags:
   - quiz
@@ -26,8 +32,3 @@ A low-stakes paper-based check-for-understanding quiz designed to take \~20 minu
 ## How to use
 
 Hand out at the end of the unit, or use as a warm-up at the start of the next class to surface lingering misconceptions about distributions.
-
-## Files
-
-- Student version: [3.1-3.4 Mini Quiz.docx](/resources/3.1-3.4%20Mini%20Quiz.docx)
-- Teacher version (answer key): [3.1-3.4 Mini Quiz\_COMPLETE.docx](/resources/3.1-3.4%20Mini%20Quiz_COMPLETE.docx)

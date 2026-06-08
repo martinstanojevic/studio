@@ -1,15 +1,26 @@
 ---
-title: "Overview JNB with Guided Notes 3.1–3.4"
-type: notebook
-description: An R Jupyter notebook covering sections 3.1–3.4 — Exploring Distributions with Histograms — paired with a printable paper Guided Notes worksheet. Students collect their own data, work through histograms using the Census at School dataset, and record observations on the worksheet as they go.
+title: Overview JNB with Guided Notes 3.1–3.4
 books:
   - AB
   - ABC
   - ABCD
 chapter: Ch. 3
+description: An R Jupyter notebook covering sections 3.1–3.4 — Exploring Distributions with Histograms — paired with a printable paper Guided Notes worksheet. Students collect their own data, work through histograms using the Census at School dataset, and record observations on the worksheet as they go.
 duration: 60
 featured: true
-file: /resources/OverviewJNB-3.1-3.4-v5.ipynb
+files:
+  - path: /resources/OverviewJNB-3.1-3.4-v5.ipynb
+    label: Overview Jupyter Notebook — Student
+    role: student
+  - path: /resources/OverviewJNB-3.1-3.4-v5-COMPLETE.ipynb
+    label: Overview Jupyter Notebook — Teacher (complete)
+    role: teacher
+  - path: /resources/3.1-3.4%20Guided%20Notes.docx
+    label: Guided Notes — Student
+    role: student
+  - path: /resources/3.1-3.4%20Guided%20Notes_COMPLETE.docx
+    label: Guided Notes — Teacher (complete)
+    role: teacher
 published: true
 tags:
   - histograms
@@ -17,6 +28,7 @@ tags:
   - data-collection
   - guided-notes
   - exploratory-data-analysis
+type: notebook
 ---
 
 ## Overview
@@ -25,16 +37,4 @@ A combined digital + paper resource. The Jupyter notebook drives the activity �
 
 ## How to use
 
-Hand out the Guided Notes worksheet at the start of the unit. Students work through the notebook in pairs or small groups, filling in the worksheet as they go. The completed instructor versions of both files are available for reference and grading.
-
-## Files
-
-**Jupyter Notebook**
-
-- Student version: [OverviewJNB-3.1-3.4-v5.ipynb](/resources/OverviewJNB-3.1-3.4-v5.ipynb)
-- Teacher version: [OverviewJNB-3.1-3.4-v5-COMPLETE.ipynb](/resources/OverviewJNB-3.1-3.4-v5-COMPLETE.ipynb)
-
-**Guided Notes (paper)**
-
-- Student version: [3.1-3.4 Guided Notes.docx](/resources/3.1-3.4%20Guided%20Notes.docx)
-- Teacher version: [3.1-3.4 Guided Notes_COMPLETE.docx](/resources/3.1-3.4%20Guided%20Notes_COMPLETE.docx)
+Hand out the Guided Notes worksheet at the start of the unit. Students work through the notebook in pairs or small groups, filling in the worksheet as they go. The teacher (complete) versions of both files are available for reference and grading.

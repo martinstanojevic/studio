@@ -3,6 +3,17 @@ export type BookCode = (typeof BOOK_CODES)[number];
 
 export type ResourceType = 'notebook' | 'activity' | 'worksheet' | 'assessment' | 'dataset';
 
+export type ResourceFileRole = 'student' | 'teacher' | 'supplement';
+
+export interface TeachingResourceFile {
+  /** URL path served from /public (e.g. /resources/foo.docx). May be percent-encoded. */
+  path: string;
+  /** Human-readable label shown in the file list (e.g. "Jupyter Notebook (student)"). */
+  label: string;
+  /** Audience role — used for grouping in the UI and filtering bulk downloads. */
+  role?: ResourceFileRole;
+}
+
 export interface TeachingResourceItem {
   slug: string;
   title: string;
@@ -12,7 +23,8 @@ export interface TeachingResourceItem {
   chapter?: string;
   duration?: number;
   tags: string[];
-  file?: string;
+  /** Attached files. Empty array means the resource has no downloads (rare). */
+  files: TeachingResourceFile[];
   featured: boolean;
 }
 

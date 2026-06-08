@@ -30,7 +30,7 @@ export function useTeachingResources() {
       chapter: r.chapter,
       duration: r.duration,
       tags: r.tags ?? [],
-      file: r.file,
+      files: r.files ?? [],
       featured: r.featured ?? false,
     })),
   );

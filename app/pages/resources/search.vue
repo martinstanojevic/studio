@@ -49,16 +49,84 @@ function clearSelection() {
   selectedSlugs.value = new Set();
 }
 
-function downloadSelected() {
-  for (const slug of selectedSlugs.value) {
-    const resource = items.value.find((r) => r.slug === slug);
-    if (!resource?.file) continue;
+const toast = useToast();
+const downloading = ref(false);
+
+/**
+ * Trigger parallel downloads for every selected resource. Each resource
+ * becomes its own zip (built by /api/resources/[slug]/download), so the
+ * browser fires N concurrent requests and the user gets N zip files.
+ *
+ * We fetch each zip as a Blob and then trigger the save via a temporary
+ * <a download> on an object URL. That gives clean per-resource error
+ * handling (a 4xx/5xx surfaces as a thrown error before any "download"
+ * happens) and avoids the SPA-link interception that happens when an
+ * <a href="/api/..."> is clicked directly inside the page.
+ */
+async function downloadOne(slug: string) {
+  const res = await fetch(`/api/resources/${slug}/download`);
+  if (!res.ok) {
+    // Try to surface server's error message for the toast.
+    let body = '';
+    try {
+      body = await res.text();
+    } catch {
+      /* ignore */
+    }
+    throw new Error(`${slug}: HTTP ${res.status}${body ? ' — ' + body.slice(0, 120) : ''}`);
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  try {
     const a = document.createElement('a');
-    a.href = resource.file;
-    a.download = resource.file.split('/').pop() ?? '';
+    a.href = url;
+    a.download = `${slug}.zip`;
     document.body.appendChild(a);
     a.click();
     a.remove();
+  } finally {
+    // Delay revoke so the browser has time to start the download save.
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+}
+
+async function downloadSelected() {
+  if (downloading.value) return;
+  const slugs = [...selectedSlugs.value];
+  if (!slugs.length) return;
+
+  downloading.value = true;
+  try {
+    const results = await Promise.allSettled(slugs.map((slug) => downloadOne(slug)));
+
+    const failed = results
+      .map((r, i) => (r.status === 'rejected' ? slugs[i] : null))
+      .filter((s): s is string => !!s);
+
+    if (failed.length === 0) {
+      toast.add({
+        title: `Downloaded ${slugs.length} ${slugs.length === 1 ? 'resource' : 'resources'}`,
+        description: 'Check your downloads folder.',
+        color: 'success',
+        icon: 'i-lucide-check',
+      });
+    } else if (failed.length < slugs.length) {
+      toast.add({
+        title: `${slugs.length - failed.length} of ${slugs.length} downloads completed`,
+        description: `Failed: ${failed.join(', ')}`,
+        color: 'warning',
+        icon: 'i-lucide-alert-triangle',
+      });
+    } else {
+      toast.add({
+        title: 'Downloads failed',
+        description: failed.join(', '),
+        color: 'error',
+        icon: 'i-lucide-x',
+      });
+    }
+  } finally {
+    downloading.value = false;
   }
 }
 
