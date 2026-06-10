@@ -20,7 +20,7 @@ export default defineContentConfig({
         files: z
           .array(
             z.object({
-              path: z.string(),
+              path: z.string().editor({ input: 'media' }),
               label: z.string(),
               role: z.enum(['student', 'teacher', 'supplement']).optional(),
             }),
