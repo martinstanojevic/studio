@@ -12,7 +12,7 @@
 import JSZip from 'jszip'
 
 interface ResourceFile {
-  path: string
+  src: string
   label: string
   role?: string
 }
@@ -48,18 +48,18 @@ export default defineEventHandler(async (event) => {
   // browser doesn't get a half-built zip rendered as a successful download.
   await Promise.all(
     files.map(async (f) => {
-      const url = new URL(f.path, origin).toString()
+      const url = new URL(f.src, origin).toString()
       const res = await fetch(url)
       if (!res.ok) {
         throw createError({
           statusCode: 502,
-          statusMessage: `Failed to fetch attached file: ${f.path} (${res.status})`,
+          statusMessage: `Failed to fetch attached file: ${f.src} (${res.status})`,
         })
       }
       const buf = Buffer.from(await res.arrayBuffer())
       // Preserve original filename for clarity. Decode %20 etc. so the file
       // inside the zip is readable, not URL-encoded gibberish.
-      const filename = decodeURIComponent(f.path.split('/').pop() ?? 'file')
+      const filename = decodeURIComponent(f.src.split('/').pop() ?? 'file')
       zip.file(filename, buf)
     }),
   )

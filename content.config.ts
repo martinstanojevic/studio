@@ -14,13 +14,14 @@ export default defineContentConfig({
         duration: z.number().optional(),
         tags: z.array(z.string()).default([]),
         // Each resource can attach multiple files (e.g., student + teacher
-        // versions of a notebook). `path` is a URL under /public, `label` is
+        // versions of a notebook). `src` is a URL under /public, `label` is
         // the display name, and `role` identifies the audience for filtering
-        // and UI grouping.
+        // and UI grouping. Named `src` (not `path`) because `path` is a
+        // reserved system field that Nuxt Studio hides from page settings.
         files: z
           .array(
             z.object({
-              path: z.string().editor({ input: 'media' }),
+              src: z.string().editor({ input: 'media' }),
               label: z.string(),
               role: z.enum(['student', 'teacher', 'supplement']).optional(),
             }),

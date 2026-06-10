@@ -9,10 +9,10 @@ description: A short, paper-based formative quiz covering the key ideas from sec
 duration: 20
 featured: false
 files:
-  - path: /resources/3.1-3.4%20Mini%20Quiz.docx
+  - src: /resources/3.1-3.4%20Mini%20Quiz.docx
     label: Mini Quiz — Student
     role: student
-  - path: /resources/3.1-3.4%20Mini%20Quiz_COMPLETE.docx
+  - src: /resources/3.1-3.4 Mini Quiz_COMPLETE.docx
     label: Mini Quiz — Teacher (answer key)
     role: teacher
 published: true

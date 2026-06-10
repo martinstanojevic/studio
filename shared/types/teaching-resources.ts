@@ -7,7 +7,7 @@ export type ResourceFileRole = 'student' | 'teacher' | 'supplement';
 
 export interface TeachingResourceFile {
   /** URL path served from /public (e.g. /resources/foo.docx). May be percent-encoded. */
-  path: string;
+  src: string;
   /** Human-readable label shown in the file list (e.g. "Jupyter Notebook (student)"). */
   label: string;
   /** Audience role — used for grouping in the UI and filtering bulk downloads. */

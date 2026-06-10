@@ -103,7 +103,7 @@ function roleBadge(role: string | undefined) {
       <ul class="divide-y divide-[var(--border-light)]">
         <li
           v-for="f in files"
-          :key="f.path"
+          :key="f.src"
           class="flex items-center gap-3 py-2.5"
         >
           <UIcon name="i-lucide-file" class="h-4 w-4 text-[var(--text-tertiary)] shrink-0" />
@@ -121,11 +121,11 @@ function roleBadge(role: string | undefined) {
               </span>
             </div>
             <div class="mt-0.5 font-mono text-[11px] text-[var(--text-tertiary)] break-all">
-              {{ fileBaseName(f.path) }}
+              {{ fileBaseName(f.src) }}
             </div>
           </div>
           <a
-            :href="f.path"
+            :href="f.src"
             download
             class="inline-flex items-center gap-1 rounded-full border-[1.5px] border-[var(--border-light)] bg-white px-3 py-1 text-xs font-medium text-[var(--ck-indigo)] no-underline transition-colors hover:border-[var(--ck-primary-mid)] hover:text-[var(--ck-primary)]"
           >

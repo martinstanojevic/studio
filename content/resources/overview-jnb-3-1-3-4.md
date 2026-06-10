@@ -9,16 +9,16 @@ description: An R Jupyter notebook covering sections 3.1–3.4 — Exploring Dis
 duration: 60
 featured: true
 files:
-  - path: /resources/OverviewJNB-3.1-3.4-v5.ipynb
+  - src: /resources/OverviewJNB-3.1-3.4-v5.ipynb
     label: Overview Jupyter Notebook — Student
     role: student
-  - path: /resources/OverviewJNB-3.1-3.4-v5-COMPLETE.ipynb
+  - src: /resources/OverviewJNB-3.1-3.4-v5-COMPLETE.ipynb
     label: Overview Jupyter Notebook — Teacher (complete)
     role: teacher
-  - path: /resources/3.1-3.4%20Guided%20Notes.docx
+  - src: /resources/3.1-3.4%20Guided%20Notes.docx
     label: Guided Notes — Student
     role: student
-  - path: /resources/3.1-3.4%20Guided%20Notes_COMPLETE.docx
+  - src: /resources/3.1-3.4%20Guided%20Notes_COMPLETE.docx
     label: Guided Notes — Teacher (complete)
     role: teacher
 published: true
