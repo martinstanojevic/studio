@@ -31,7 +31,7 @@ tags:
 type: notebook
 ---
 
-## Overview
+## Overview 2
 
 A combined digital + paper resource. The Jupyter notebook drives the activity — students collect their own data (timing how long they can stand on their left leg), join it with the Census at School dataset, and use histograms to explore distribution shape, center, and spread. The Guided Notes worksheet scaffolds the activity on paper: students record predictions, jot observations, and answer reflection prompts as they advance through the notebook.
 
