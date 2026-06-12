@@ -7,9 +7,11 @@ export default defineContentConfig({
       source: 'resources/**/*.md',
       schema: z.object({
         title: z.string(),
+        // TODO: Verify this list is correct
         type: z.enum(['notebook', 'activity', 'worksheet', 'assessment', 'dataset']),
         description: z.string(),
         books: z.array(z.string()).default([]),
+        // TODO: Is this required? Ask for a fixed list of chapters
         chapter: z.string().optional(),
         duration: z.number().optional(),
         tags: z.array(z.string()).default([]),

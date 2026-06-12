@@ -1,12 +1,9 @@
 <script setup lang="ts">
-// Admin-only affordance: the button shows when the site runs inside an iframe
-// (Studio's preview, where admins do their editing) or in local dev. Regular
-// visitors never see it.
-const visible = ref(false);
+const visible = ref(true);
 const open = ref(false);
 
 onMounted(() => {
-  visible.value = import.meta.dev || window.self !== window.top;
+  // visible.value = import.meta.dev || window.self !== window.top;
 });
 </script>
 
