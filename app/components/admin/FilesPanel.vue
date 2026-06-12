@@ -17,7 +17,7 @@ onMounted(() => {
         <button
           type="button"
           aria-label="Open resource files panel"
-          class="fixed bottom-6 right-12 z-40 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-[var(--ck-indigo)] text-white shadow-lg transition-transform hover:scale-105"
+          class="fixed bottom-6 right-12 left-auto! z-40 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-[var(--ck-indigo)] text-white shadow-lg transition-transform hover:scale-105"
           @click="open = true"
         >
           <UIcon name="i-lucide-folder-open" class="h-5 w-5" />
