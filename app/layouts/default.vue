@@ -27,5 +27,6 @@
     <main>
       <slot />
     </main>
+    <AdminFilesPanel />
   </div>
 </template>

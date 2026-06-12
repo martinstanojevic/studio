@@ -1,4 +1,33 @@
-import { statSync } from 'node:fs'
+import { statSync, readdirSync } from 'node:fs'
+import { join, relative, sep } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+// Scanned once at build time so the admin files panel works on any deploy
+// target without runtime filesystem access to /public. New uploads published
+// through Studio trigger a rebuild, which refreshes this list.
+function scanResourceFiles() {
+  const publicDir = fileURLToPath(new URL('./public', import.meta.url))
+  const base = join(publicDir, 'resources')
+  try {
+    return readdirSync(base, { withFileTypes: true, recursive: true })
+      .filter((entry) => entry.isFile() && !entry.name.startsWith('.'))
+      .map((entry) => {
+        const abs = join(entry.parentPath ?? base, entry.name)
+        const stats = statSync(abs)
+        return {
+          name: entry.name,
+          // Percent-encode each segment so the path is paste-ready for the
+          // `files[].src` frontmatter field (matches existing %20-style paths).
+          path: `/${relative(publicDir, abs).split(sep).map(encodeURIComponent).join('/')}`,
+          size: stats.size,
+          modifiedAt: stats.mtime.toISOString(),
+        }
+      })
+      .sort((a, b) => b.modifiedAt.localeCompare(a.modifiedAt))
+  } catch {
+    return []
+  }
+}
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-04-28',
@@ -8,6 +37,10 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     'nuxt-studio',
   ],
+  runtimeConfig: {
+    // Server-only (kept out of the client payload); served via /api/admin/files.
+    resourceFilesManifest: scanResourceFiles(),
+  },
   studio: {
     repository: {
       provider: 'github',
