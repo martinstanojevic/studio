@@ -1,10 +1,12 @@
 <script setup lang="ts">
-const visible = ref(true);
+// Admin-only affordance: Studio's activation plugin verifies the session
+// cookie against /__nuxt_studio/auth/session and stores the logged-in editor
+// in the 'studio-session' state (see nuxt-studio runtime/utils/activation.js).
+// It stays null for regular visitors. Local dev (where Studio activates with
+// a stub user without setting that state) always shows the button.
+const studioUser = useState<{ email?: string } | null>('studio-session', () => null);
+const visible = computed(() => import.meta.dev || Boolean(studioUser.value?.email));
 const open = ref(false);
-
-onMounted(() => {
-  // visible.value = import.meta.dev || window.self !== window.top;
-});
 </script>
 
 <template>
